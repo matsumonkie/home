@@ -1,0 +1,80 @@
+xkb_keymap {
+	xkb_keycodes  { include "evdev+aliases(azerty)" };
+	xkb_types     { include "complete"	};
+	xkb_compat    { include "complete"	};
+	xkb_symbols   { include "pc"
+
+name[Group1]= "French (Bepo for developer)";
+
+key <CAPS> { type[group1] = "ONE_LEVEL",  [ ISO_Level3_Shift   ] };
+key <AC12> { type[group1] = "ONE_LEVEL",  [ ISO_Level3_Shift   ] };
+key <LWIN> { type[group1] = "ONE_LEVEL",  [ Alt_L              ] };
+key <MENU> { type[group1] = "ONE_LEVEL",  [ Alt_R              ] };
+key <LSGT> { type[group1] = "ONE_LEVEL",  [ Shift_L            ] };
+key <LFSH> { type[group1] = "ONE_LEVEL",  [ Shift_L            ] };
+key <LALT> { type[group1] = "ONE_LEVEL",  [ Control_L          ] , actions = [ SetMods(modifiers=Control) ] };
+key <RALT> { type[group1] = "ONE_LEVEL",  [ Control_R          ] , actions = [ SetMods(modifiers=Control) ] };
+key <RCTL> { type[group1] = "ONE_LEVEL",  [ Alt_R              ] };
+key <SPCE> { type[group1] = "FOUR_LEVEL", [ space, quotedbl, apostrophe, underscore        ] };
+
+modifier_map Shift { Shift_L, Shift_R };
+modifier_map Control { Control_L, Control_R };
+modifier_map Mod5 { ISO_Level3_Shift }; // Alt Gr
+modifier_map Mod3 { ISO_Level5_Shift }; // Level5
+
+// NUMBER LINE
+key <TLDE> { [ asciitilde ] };
+key <AE01> { [ 1, ampersand ] };
+key <AE02> { [ 2, asciitilde ] };
+key <AE03> { [ 3, numbersign ] };
+key <AE04> { [ 4, apostrophe ] };
+key <AE05> { [ 5, bracketleft ] };
+key <AE06> { [ 6, bar ] };
+key <AE07> { [ 7, none ] };
+key <AE08> { [ 8, backslash ] };
+key <AE09> { [ 9, asciicircum ] };
+key <AE10> { [ 0, parenleft, bracketleft ] };
+key <AE11> { [ 0, parenright, bracketright, at ] };
+
+// FIRST LINE
+key <AD01> { [ b, B, asterisk ] };
+key <AD02> { [ eacute, Eacute, equal ] };
+key <AD03> { [ p, P, semicolon ] };
+key <AD04> { [ o, O,  minus ] };
+key <AD05> { [ comma, plus, percent ] };
+key <AD07> { [ y, Y ] };
+key <AD08> { [ v, V, quoteleft ] };
+key <AD09> { [ d, D, Home ] };
+key <AD10> { [ l, L, End ] };
+key <AD11> { [ j, J, Next ] };
+key <AD12> { [ z, Z] };
+key <AD13> { [ percent ] };
+
+// SECOND LINE
+key <AC01> { [ a, A, Escape ] };
+key <AC02> { [ u, U, Delete ] };
+key <AC03> { [ i, I, BackSpace ] };
+key <AC04> { [ e, E, Return ] };
+key <AC05> { [ period, colon, dollar, EuroSign ] };
+key <AC07> { [ c, C, ccedilla ] };
+key <AC08> { [ t, T, Left ] };
+key <AC09> { [ s, S, Up ] };
+key <AC10> { [ r, R, Down ] };
+key <AC11> { [ n, N, Right ] };
+
+// FOURTH LINE
+key <AB01> { [ x, X, less, at               ] };
+key <AB02> { [ egrave, agrave, greater      ] };
+key <AB03> { [ w, W, exclam                 ] };
+key <AB04> { [ f, F, question, none         ] };
+key <AB06> { [ k, K, bar                    ] };
+key <AB07> { [ m, M, backslash              ] };
+key <AB08> { [ q, Q, slash, none            ] };
+key <AB09> { [ g, G, braceleft, none        ] };
+key <AB10> { [ h, H, braceright, none       ] };
+
+};
+
+	// ONLY DESCRIBING PHYSICAL KEYBOARD LAYOUT
+	xkb_geometry  { include "pc(pc105)"	};
+};
