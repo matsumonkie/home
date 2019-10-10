@@ -515,6 +515,8 @@
 
 ;; * Shortcut
 
+(message "\n -- setting shortcuts --\n")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BASIC COMMAND
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -736,9 +738,11 @@
 ;;;;;;;;;;;;;
 (global-set-key (kbd "C-p")  'recenter-top-bottom)
 
-(global-set-key (kbd "C-SPC m")  'rename-this-
-(message "\n -- setting shortcuts --\n")
+(global-set-key (kbd "C-SPC m")  'rename-this-buffer-and-file)
+
 ;; * System
+
+(message "\n -- setting system --\n")
 
 ;; Fast boot
 (modify-frame-parameters nil '((wait-for-wm . nil)))
@@ -939,11 +943,6 @@
 ;; prevent instructions from being shown at startup
 (setq magit-last-seen-setup-instructions "1.4.0")
 
-;;; Org mode
-(install-package 'org)
-(require 'org-install)
-(load "~/.emacs.d/conf/org.el")
-
 ;;; Web mode (.erb)
 (install-package 'web-mode)
 (require 'web-mode)
@@ -958,7 +957,23 @@
 
 ;;; Coffee mode
 (install-package 'coffee-mode)
-(custom-set-variables '(coffee-tab-width 2))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(coffee-tab-width 2)
+ '(haskell-interactive-popup-errors nil)
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-hoogle-imports t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-type (quote stack-ghci))
+ '(haskell-tags-on-save t)
+ '(markdown-command "rdiscount")
+ '(package-selected-packages
+   (quote
+    (rinari web-mode vimish-fold tabbar slim-mode rsense projectile outshine nav multiple-cursors markdown-mode magit jade-mode haskell-mode haml-mode flx-ido expand-region elm-mode csv-mode coffee-mode ace-jump-mode))))
 
 ;;; Slim-mode
 (install-package 'slim-mode)
@@ -969,8 +984,7 @@
 (require 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
-(custom-set-variables
- '(markdown-command "rdiscount"))
+
 
 ;;; ERC
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
@@ -1012,11 +1026,14 @@
 (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
 
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(markdown-header-face-1 ((t (:inherit outline-1))))
  '(markdown-header-face-2 ((t (:inherit outline-2))))
  '(outline-1 ((t (:foreground "red" :bold t :underline t))))
- '(outline-2 ((t (:foreground "yellow" :bold nil :underline t))))
- )
+ '(outline-2 ((t (:foreground "yellow" :bold nil :underline t)))))
 
 (set-display-table-slot standard-display-table
                         'selective-display
@@ -1088,18 +1105,12 @@
       '("--ghci-options=-ferror-spans -fshow-loaded-modules"
         "--no-build" "--no-load"))
 
-(custom-set-variables
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-interactive-popup-errors nil)
- '(haskell-process-suggest-hoogle-imports t)
- '(haskell-process-log t)
- '(haskell-process-type 'stack-ghci))
+
 
 (setq haskell-compile-cabal-build-command "stack build")
 
 ;; Create tags on save
-(custom-set-variables '(haskell-tags-on-save t))
+
 (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-tag-find)
 
 ;; somehow this settings remove the pragma: {-# LANGUAGE ViewPatterns #-} on every save...
@@ -1158,12 +1169,6 @@
 ;; RSense
 (install-package 'rsense)
 (require 'rsense)
-
-;; Electric-ruby
-(add-to-list 'load-path "~/.emacs.d/plugins")
-(require 'ruby-electric)
-(add-hook 'ruby-mode-hook
-          (lambda () (ruby-electric-mode t)))
 
 ;; Rinari
 (install-package 'rinari)
