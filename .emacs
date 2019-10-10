@@ -752,6 +752,9 @@
 ;; Always show line number
 (global-display-line-numbers-mode)
 
+;; Save cursor position when exiting a file
+(save-place-mode)
+
 ;; Delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -876,8 +879,9 @@
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
 
-(message "\n -- setting system --\n")
 ;; * Plugin
+
+(message "\n -- setting plugin --\n")
 
 (require 'package)
 (add-to-list 'package-archives
@@ -888,23 +892,75 @@
   (unless (package-installed-p name)
     (package-refresh-contents) (package-install name)))
 
-;;; Redo +
-;(install-package 'redo+)
-;(require 'redo+)
+;; ** Dash
 
-;;; Nav
-(install-package 'nav)
-(require 'nav)
-(global-set-key [f8] 'nav-toggle)
+;; A modern list api for Emacs
 
-;;; Tabbar
+(install-package 'dash)
+(require 'dash)
+
+;; ** Tabbar
+
 (install-package 'tabbar)
+(require 'tabbar)
+(tabbar-mode)
 
-;;; Ido
-(require 'ido)
-(ido-mode t)
+(setq
+ tabbar-scroll-left-help-function  nil   ; do not show help information
+ tabbar-scroll-right-help-function nil
+ tabbar-help-on-tab-function       nil
+ tabbar-home-help-function         nil
+ tabbar-buffer-home-button  (quote (("") "")) ; do not show tabbar button
+ tabbar-scroll-left-button  (quote (("") ""))
+ tabbar-scroll-right-button (quote (("") "")))
 
-;;; Flx-ido
+(set-face-attribute 'tabbar-default nil :weight
+                    'normal :width
+                    'normal :background "blue" :underline nil)
+(set-face-attribute 'tabbar-unselected	nil :background "blue"   :foreground "white" :box nil)
+(set-face-attribute 'tabbar-selected	nil :background "yellow" :foreground "black" :box nil)
+(setq tabbar-separator '(1))
+
+;; Add a buffer modification state indicator in the tab label, and place a
+;; space around the label to make it looks less crowd.
+(defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
+  (setq ad-return-value
+    (if (and (buffer-modified-p (tabbar-tab-value tab))
+             (buffer-file-name (tabbar-tab-value tab)))
+        (concat "*" (concat ad-return-value ""))
+        (concat "" (concat ad-return-value "")))))
+
+(defun tabbar-buffer-groups ()
+  "Return the list of group names the current buffer belongs to.
+This function is a custom function for tabbar-mode's tabbar-buffer-groups.
+This function group all buffers into 3 groups:
+Those Dired, those user buffer, and those emacs buffer.
+Emacs buffer are those starting with “*”."
+  (list
+   (cond
+    ((string-equal "*" (substring (buffer-name) 0 1))
+     "Emacs Buffer"
+     )
+    ((eq major-mode 'dired-mode)
+     "Dired"
+     )
+    (t
+     "User Buffer"
+     )
+    )))
+
+(setq tabbar-buffer-groups-function 'tabbar-buffer-groups)
+
+;; ** Ido
+
+;; auto completion a la Sublime when searching for files
+
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+
+;; ** Flx-ido
+
 (install-package 'flx-ido)
 (require 'flx-ido)
 (ido-mode 1)
@@ -914,126 +970,64 @@
 ;; disable ido faces to see flx highlights.
 (setq ido-use-faces nil)
 
-;;; Projectile
+;; ** Projectile
+
+;; find file in a git scoped project
+
 (install-package 'projectile)
 (projectile-mode)
 (global-set-key (kbd "C-SPC a") 'projectile-find-file)
-                                        ;(global-set-key (kbd "C-SPC d") 'projectile-find-file-in-directory)
 (global-set-key (kbd "C-SPC p") 'projectile-switch-project)
 
-;;; Ace jump mode
+;; ** Ace jump mode
+
+;; jump to any word or initial
+
 (install-package 'ace-jump-mode)
 (require 'ace-jump-mode)
 (setq ace-jump-mode-case-fold nil)
 (global-set-key (kbd "C-j") 'ace-jump-mode)
 (global-set-key (kbd "M-j") 'ace-jump-char-mode)
 
-;;; Expand region
+;; ** Expand region
+
+;; incrementally expand region to word -> string -> paragraph -> ...
+
 (install-package 'expand-region)
-(require 'expand-region)
+
 (global-set-key (kbd "M-o") 'er/expand-region)
 
-;;; Multiple cursor
-(install-package 'multiple-cursors)
-(require 'multiple-cursors)
+;; ** Multiple cursor
 
-;;; Magit
+(install-package 'multiple-cursors)
+
+;; ** Magit
+
 (install-package 'magit)
-(require 'magit)
+
 ;; prevent instructions from being shown at startup
 (setq magit-last-seen-setup-instructions "1.4.0")
 
-;;; Web mode (.erb)
-(install-package 'web-mode)
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
-(setq web-mode-extra-auto-pairs
-      '(("erb"  . (("open" "close")))
-        ("php"  . (("open" "close")
-                   ("open" "close")))
-        ))
-(setq web-mode-enable-auto-pairing t)
+;; ** Github markdown
 
-;;; Coffee mode
-(install-package 'coffee-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(coffee-tab-width 2)
- '(haskell-interactive-popup-errors nil)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-hoogle-imports t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote stack-ghci))
- '(haskell-tags-on-save t)
- '(markdown-command "rdiscount")
- '(package-selected-packages
-   (quote
-    (rinari web-mode vimish-fold tabbar slim-mode rsense projectile outshine nav multiple-cursors markdown-mode magit jade-mode haskell-mode haml-mode flx-ido expand-region elm-mode csv-mode coffee-mode ace-jump-mode))))
-
-;;; Slim-mode
-(install-package 'slim-mode)
-(require 'slim-mode)
-
-;;; Github markdown
 (install-package 'markdown-mode)
-(require 'markdown-mode)
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
+(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 
+;; ** Elm
 
-;;; ERC
-(setq erc-hide-list '("JOIN" "PART" "QUIT"))
-
-(require 'erc-match)
-(setq erc-keywords '("iori" "itsu"))
-(setq erc-autojoin-channels-alists
-      '(("freenode.net" "#emacs" "#haskell")))
-(add-to-list 'erc-nick "itsu")
-
-;;; Jade
-(install-package 'jade-mode)
-(require 'jade-mode)
-
-;;; Elm
 (install-package 'elm-mode)
-(require 'elm-mode)
 
-;;; Csv
+;; ** Csv
+
 (install-package 'csv-mode)
-(require 'csv-mode)
 
-;;; Vimish Fold
-(install-package 'vimish-fold)
-(require 'vimish-fold)
-(global-set-key (kbd "C-SPC t") 'my-fold-toggle)
-
-;;; Outline & Outshine
+;; ** Outline & Outshine
 
 (install-package 'outshine)
 (require 'outshine)
 
 (add-hook 'outline-minor-mode-hook 'outshine-mode)
 (add-hook 'prog-mode-hook 'outline-minor-mode)
-;; for haskell, headers like `--*` will not compile
-;; this var makes it possible to write headers like: `-- *`
-(setq outshine-preserve-delimiter-whitespace t)
-
-(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(markdown-header-face-1 ((t (:inherit outline-1))))
- '(markdown-header-face-2 ((t (:inherit outline-2))))
- '(outline-1 ((t (:foreground "red" :bold t :underline t))))
- '(outline-2 ((t (:foreground "yellow" :bold nil :underline t)))))
 
 (set-display-table-slot standard-display-table
                         'selective-display
@@ -1057,13 +1051,6 @@
 
 (defconst lisp-outlines-font-lock-alist
   ;; Outlines
-  '(("\\(-- \\*\\) "          ?■)
-    ("\\(-- \\*\\*\\) "       ?○)
-    ("\\(-- \\*\\*\\*\\) "    ?✸)
-    ("\\(-- \\*\\*\\*\\*\\) " ?✿)))
-
-(defconst lisp-outlines-font-lock-alist
-  ;; Outlines
   '(("\\(^;; \\*\\) "          ?■)
     ("\\(^;; \\*\\*\\) "       ?✸)
     ("\\(^;; \\*\\*\\*\\) "    ?✿)
@@ -1076,13 +1063,24 @@
     ("\\(^-- \\*\\*\\*\\) "    ?✿)
     ("\\(^-- \\*\\*\\*\\*\\) " ?○)))
 
-(add-font-locks
- '((haskell-outlines-font-lock-alist haskell-mode-hook)))
+(defconst shell-outlines-font-lock-alist
+  ;; Outlines
+  '(("\\(^# \\*\\) "          ?■)
+    ("\\(^# \\*\\*\\) "       ?✸)
+    ("\\(^# \\*\\*\\*\\) "    ?✿)
+    ("\\(^# \\*\\*\\*\\*\\) " ?○)))
 
 (add-font-locks
- '((lisp-outlines-font-lock-alist emacs-lisp-mode-hook)))
+ '((haskell-outlines-font-lock-alist haskell-mode-hook)
+   (lisp-outlines-font-lock-alist emacs-lisp-mode-hook)
+   (shell-outlines-font-lock-alist shell-script-mode-hook)))
 
-(message "\n -- setting plugin --\n")
+(defun my-haskell-outline-mode-hook()
+  ;; for haskell, headers like `--*` will not compile
+  ;; this var makes it possible to write headers like: `-- *`
+  (setq-local outshine-preserve-delimiter-whitespace t))
+
+(add-hook 'haskell-mode-hook 'my-haskell-outline-mode-hook)
 
 ;; * Dev
 
@@ -1105,8 +1103,6 @@
       '("--ghci-options=-ferror-spans -fshow-loaded-modules"
         "--no-build" "--no-load"))
 
-
-
 (setq haskell-compile-cabal-build-command "stack build")
 
 ;; Create tags on save
@@ -1115,7 +1111,6 @@
 
 ;; somehow this settings remove the pragma: {-# LANGUAGE ViewPatterns #-} on every save...
 ;;(custom-set-variables '(haskell-stylish-on-save t))
-
 
 ;;; Shortcuts
 
@@ -1154,6 +1149,7 @@
 ;; ** Ruby
 
 ;; Enhanced Ruby Mode
+
 (install-package 'ruby-mode)
 (require 'ruby-mode)
 
@@ -1162,26 +1158,6 @@
   (local-unset-key (kbd "C-j"))
 )
 (add-hook 'ruby-mode-hook 'set-newline-and-indent)
-
-;; HAML mode
-(install-package 'haml-mode)
-
-;; RSense
-(install-package 'rsense)
-(require 'rsense)
-
-;; Rinari
-(install-package 'rinari)
-(require 'rinari)
-(global-rinari-mode)
-
-(add-hook 'rinari-minor-mode-hook (lambda()
-  (local-set-key (kbd "C-c c") 'rinari-find-controller)
-  (local-set-key (kbd "C-c m") 'rinari-find-model)
-  (local-set-key (kbd "C-c v") 'rinari-find-view)
-  (local-set-key (kbd "C-c f") 'rinari-find-file-in-project)
-  (local-set-key (kbd "C-j")   'ace-jump-mode)
-))
 
 ;; do not add header => -*- coding: utf-8 -*-
 (setq ruby-insert-encoding-magic-comment nil)
@@ -1227,56 +1203,3 @@
 
 ;; Frame name = edited file name
 (setq frame-title-format '(buffer-file-name "%f"))
-
-;; Underline current line
-;(global-hl-line-mode 1)
-;(set-face-background 'hl-line "#111")
-;(set-face-foreground 'highlight nil)
-
-;; Tabbar
-(require 'tabbar)
-(tabbar-mode)
-
-(setq
- tabbar-scroll-left-help-function  nil   ; do not show help information
- tabbar-scroll-right-help-function nil
- tabbar-help-on-tab-function       nil
- tabbar-home-help-function         nil
- tabbar-buffer-home-button  (quote (("") "")) ; do not show tabbar button
- tabbar-scroll-left-button  (quote (("") ""))
- tabbar-scroll-right-button (quote (("") "")))
-
-(set-face-attribute 'tabbar-default nil :weight 'normal :width 'normal :background "blue" :underline nil)
-(set-face-attribute 'tabbar-unselected	nil :background "blue"   :foreground "white" :box nil)
-(set-face-attribute 'tabbar-selected	nil :background "yellow" :foreground "black" :box nil)
-(setq tabbar-separator '(1))
-
-;; Add a buffer modification state indicator in the tab label, and place a
-;; space around the label to make it looks less crowd.
-(defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
-  (setq ad-return-value
-    (if (and (buffer-modified-p (tabbar-tab-value tab))
-             (buffer-file-name (tabbar-tab-value tab)))
-        (concat "*" (concat ad-return-value ""))
-        (concat "" (concat ad-return-value "")))))
-
-(defun tabbar-buffer-groups ()
-  "Return the list of group names the current buffer belongs to.
-This function is a custom function for tabbar-mode's tabbar-buffer-groups.
-This function group all buffers into 3 groups:
-Those Dired, those user buffer, and those emacs buffer.
-Emacs buffer are those starting with “*”."
-  (list
-   (cond
-    ((string-equal "*" (substring (buffer-name) 0 1))
-     "Emacs Buffer"
-     )
-    ((eq major-mode 'dired-mode)
-     "Dired"
-     )
-    (t
-     "User Buffer"
-     )
-    )))
-
-(setq tabbar-buffer-groups-function 'tabbar-buffer-groups)
