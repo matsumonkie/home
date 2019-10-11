@@ -1,0 +1,38 @@
+[global_config]
+  borderless = True
+  close_button_on_tab = False
+  handle_size = 1
+  window_state = maximise
+[keybindings]
+  next_tab = <Ctrl>Tab
+  prev_tab = <Ctrl><Shift>Tab
+  switch_to_tab_1 = None
+  switch_to_tab_2 = None
+  switch_to_tab_3 = None
+  switch_to_tab_4 = None
+  switch_to_tab_5 = None
+  switch_to_tab_6 = None
+  switch_to_tab_7 = None
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    background_color = "#ffffff"
+    cursor_color = "#ff0000"
+    cursor_shape = ibeam
+    font = Monospace 12
+    foreground_color = "#000000"
+    icon_bell = False
+    login_shell = True
+    scrollbar_position = hidden
+    show_titlebar = False
+    urgent_bell = True
+    use_system_font = False
