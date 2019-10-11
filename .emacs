@@ -10,21 +10,21 @@
 
 ;; do not unset "\C-m" otherwise enter key does not work in console mode
 (dolist (key '(
-"\C-a" "\C-b" "\C-d" "\C-e" "\C-f" "\C-g"
-"\C-j" "\C-k" "\C-l" "\C-n" "\C-o" "\C-p"
-"\C-q" "\C-r" "\C-s" "\C-t" "\C-u" "\C-v"
-"\C-w" "\C-x" "\C-y" "\C-z" "\C-SPC"))
-(global-unset-key key))
+               "\C-a" "\C-b" "\C-d" "\C-e" "\C-f" "\C-g"
+               "\C-j" "\C-k" "\C-l" "\C-n" "\C-o" "\C-p"
+               "\C-q" "\C-r" "\C-s" "\C-t" "\C-u" "\C-v"
+               "\C-w" "\C-x" "\C-y" "\C-z" "\C-SPC"))
+  (global-unset-key key))
 
 ;; ** META
 
 (dolist (key '(
-  "\M-a" "\M-b" "\M-c" "\M-d" "\M-e" "\M-f"
-  "\M-g" "\M-h" "\M-j" "\M-k" "\M-l" "\M-m"
-  "\M-n" "\M-o" "\M-p" "\M-q" "\M-r" "\M-s"
-  "\M-t" "\M-u" "\M-v" "\M-w" "\M-x" "\M-y"
-  "\M-z" "\M-SPC"))
-(global-unset-key key))
+               "\M-a" "\M-b" "\M-c" "\M-d" "\M-e" "\M-f"
+               "\M-g" "\M-h" "\M-j" "\M-k" "\M-l" "\M-m"
+               "\M-n" "\M-o" "\M-p" "\M-q" "\M-r" "\M-s"
+               "\M-t" "\M-u" "\M-v" "\M-w" "\M-x" "\M-y"
+               "\M-z" "\M-SPC"))
+  (global-unset-key key))
 
 (global-unset-key "\C-e\C-n")
 
@@ -586,14 +586,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hack to solve problem for tab and C-i
-;(global-set-key "\t" 'self-insert-command)
+                                        ;(global-set-key "\t" 'self-insert-command)
 
 (global-set-key (kbd "C-i") 'backward-kill-word)
 (global-set-key (kbd "C-o") 'repeat)
 
-;(keyboard-translate ?\C-i ?\M-|)
-;(global-set-key [?\M-|] 'backward-kill-word)
-;(global-set-key "¿" 'tab-to-tab-stop)
+                                        ;(keyboard-translate ?\C-i ?\M-|)
+                                        ;(global-set-key [?\M-|] 'backward-kill-word)
+                                        ;(global-set-key "¿" 'tab-to-tab-stop)
 
 (global-set-key "\C-u" 	  'kill-word)
 (global-set-key "\M-i" 	  'my-backward-kill-line)
@@ -656,7 +656,7 @@
 (define-key global-map (kbd "C-SPC :") 'uncomment-line)
 
 (keyboard-translate ?\C-y ?\C-é)
-;(global-set-key (kbd "é") "y")
+                                        ;(global-set-key (kbd "é") "y")
 (global-set-key (kbd "C-y") 'my-copy-line)
 
 (global-set-key (kbd "C-SPC i") 'indent-region)
@@ -666,7 +666,7 @@
 
 ;; Behaviour for emacs in terminal
 (if (display-graphic-p)
-   (progn
+    (progn
       ;; shortcut terminator like :)
       (global-set-key (kbd "C-S-h") 'split-window-vertically)
       (global-set-key (kbd "C-S-v") 'split-window-horizontally)
@@ -681,12 +681,12 @@
 
 
 ;; Same with return and C-m
-;(keyboard-translate ?\C-m ?\C-&)
-;(global-set-key (kbd "C-&") 'newline-and-indent)
-;(global-set-key (kbd "RET") 'newline-and-indent)
+                                        ;(keyboard-translate ?\C-m ?\C-&)
+                                        ;(global-set-key (kbd "C-&") 'newline-and-indent)
+                                        ;(global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "RET") 'newline-and-indent)
 ;; Same with C-c which is a prefix key
-;(keyboard-translate ?\C-j ?\C-.)
+                                        ;(keyboard-translate ?\C-j ?\C-.)
 (global-unset-key (kbd "C-@ C-@"))
 (global-set-key (kbd "C-SPC C-SPC") 'execute-extended-command)
 
@@ -770,9 +770,9 @@
 (unless (file-exists-p my-backup-directory)
   (make-directory my-backup-directory))
 (setq backup-directory-alist
-  `((".*" . ,my-backup-directory)))
+      `((".*" . ,my-backup-directory)))
 (setq auto-save-file-name-transforms
-  `((".*" ,my-backup-directory t)))
+      `((".*" ,my-backup-directory t)))
 (setq delete-old-versions t
       backup-by-copying t          ; copy rather than rename, slower but simpler
       kept-new-versions 6
@@ -807,15 +807,15 @@
     (setq automatic-hscrolling t)))
 
 ;; le contenu se déplace d'une seule ligne en fin de fenetre
-;(setq scroll-step 1)
+                                        ;(setq scroll-step 1)
 
 ;; No visual alert
 (setq visible-bell 'nil)
 
 ;; Cursor position fixed when page is scrolled
-;(setq scroll-preserve-screen-position t)
+                                        ;(setq scroll-preserve-screen-position t)
 
-; Save cursor position and load it automatically when opening file
+                                        ; Save cursor position and load it automatically when opening file
 (setq save-place-file (concat user-emacs-directory "saveplace"))
 (setq-default save-place t)
 (require 'saveplace)
@@ -828,15 +828,15 @@
 
 ;; Mouse support
 (if (load "mwheel" t)
-	(mwheel-install))
+    (mwheel-install))
 
 ;; Corresponding parentheses shown
 (require 'paren)
 (show-paren-mode t)
 (setq blink-matching-paren t
- blink-matching-paren-on-screen t
- blink-matching-paren-dont-ignore-comments t)
-;(set-face-background 'show-paren-match-face "green")
+      blink-matching-paren-on-screen t
+      blink-matching-paren-dont-ignore-comments t)
+                                        ;(set-face-background 'show-paren-match-face "green")
 
 ;; Automatic completion
 (require 'dabbrev)
@@ -847,19 +847,19 @@
 
 ;; Mode associated to file extension
 (setq auto-mode-alist
-  (append
-    '(("\\.C$"    . c++-mode)
-      ("\\.H$"    . c++-mode)
-      ("\\.cc$"   . c++-mode)
-      ("\\.hh$"   . c++-mode)
-      ("\\.c$"    . c-mode)
-      ("\\.h$"    . c++-mode)
-      ("\\.m$"    . objc-mode)
-      ("\\.java$" . java-mode)
-      ("\\.tex$"  . latex-mode)
-      ("\\.markdown$" . markdown-mode)
-      ("\\.md$" . markdown-mode)
-   ) auto-mode-alist))
+      (append
+       '(("\\.C$"    . c++-mode)
+         ("\\.H$"    . c++-mode)
+         ("\\.cc$"   . c++-mode)
+         ("\\.hh$"   . c++-mode)
+         ("\\.c$"    . c-mode)
+         ("\\.h$"    . c++-mode)
+         ("\\.m$"    . objc-mode)
+         ("\\.java$" . java-mode)
+         ("\\.tex$"  . latex-mode)
+         ("\\.markdown$" . markdown-mode)
+         ("\\.md$" . markdown-mode)
+         ) auto-mode-alist))
 
 ;; Use same buffer for compilation
 (setq-default display-buffer-reuse-frames t)
@@ -925,10 +925,10 @@
 ;; space around the label to make it looks less crowd.
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
   (setq ad-return-value
-    (if (and (buffer-modified-p (tabbar-tab-value tab))
-             (buffer-file-name (tabbar-tab-value tab)))
-        (concat "*" (concat ad-return-value ""))
-        (concat "" (concat ad-return-value "")))))
+        (if (and (buffer-modified-p (tabbar-tab-value tab))
+                 (buffer-file-name (tabbar-tab-value tab)))
+            (concat "*" (concat ad-return-value ""))
+          (concat "" (concat ad-return-value "")))))
 
 (defun tabbar-buffer-groups ()
   "Return the list of group names the current buffer belongs to.
@@ -1028,6 +1028,7 @@ Emacs buffer are those starting with “*”."
 
 (add-hook 'outline-minor-mode-hook 'outshine-mode)
 (add-hook 'prog-mode-hook 'outline-minor-mode)
+(add-hook 'haskell-mode-hook 'outline-minor-mode)
 
 (set-display-table-slot standard-display-table
                         'selective-display
@@ -1075,12 +1076,11 @@ Emacs buffer are those starting with “*”."
    (lisp-outlines-font-lock-alist emacs-lisp-mode-hook)
    (shell-outlines-font-lock-alist shell-script-mode-hook)))
 
-(defun my-haskell-outline-mode-hook()
-  ;; for haskell, headers like `--*` will not compile
-  ;; this var makes it possible to write headers like: `-- *`
-  (setq-local outshine-preserve-delimiter-whitespace t))
+(defun my/haskell-mode-outline-hook ()
+  ;; Set the Haskell mode outline header syntax to be "-- *"
+  (setq outshine-preserve-delimiter-whitespace t))
 
-(add-hook 'haskell-mode-hook 'my-haskell-outline-mode-hook)
+(add-hook 'haskell-mode-hook 'my/haskell-mode-outline-hook)
 
 ;; * Dev
 
@@ -1156,7 +1156,7 @@ Emacs buffer are those starting with “*”."
 (defun set-newline-and-indent ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   (local-unset-key (kbd "C-j"))
-)
+  )
 (add-hook 'ruby-mode-hook 'set-newline-and-indent)
 
 ;; do not add header => -*- coding: utf-8 -*-

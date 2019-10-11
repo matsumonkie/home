@@ -55,7 +55,7 @@ DISABLE_CORRECTION="true"
 
 alias -g G='| grep'
 alias -g L='| less'
-alias -g B='&& notify-send "\(^o^)/" || notify-send "(╯°□°）╯︵ ┻━┻"'
+alias -g B='&& notify-send "\(^o^)/" --expire-time=1000 || notify-send "(╯°□°）╯︵ ┻━┻"'
 
 alias l='ls -1'
 alias rm='trash'
@@ -94,6 +94,8 @@ function current_branch {
   git symbolic-ref HEAD | cut -d'/' -f3;
 }
 
+alias g='git'
+alias gco='git checkout'
 alias gd='git diff'
 alias grhh='git reset --hard HEAD'
 alias gds='git diff --staged'
