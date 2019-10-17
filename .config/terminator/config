@@ -1,9 +1,11 @@
 [global_config]
   borderless = True
   close_button_on_tab = False
+  enabled_plugins = ActivityWatch, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   handle_size = 1
   window_state = maximise
 [keybindings]
+  layout_launcher = None
   next_tab = <Ctrl>Tab
   prev_tab = <Ctrl><Shift>Tab
   switch_to_tab_1 = None
@@ -23,6 +25,8 @@
       parent = ""
       type = Window
 [plugins]
+  [[ActivityWatch]]
+    hush_period = 1.0
 [profiles]
   [[default]]
     background_color = "#ffffff"

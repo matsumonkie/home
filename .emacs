@@ -97,6 +97,9 @@
 (defalias 'cmp 'mc/mark-previous-like-this)
 (defalias 'cma 'mc/mark-all-like-this)
 
+;; helm-ag
+(defalias 'ag 'helm-ag)
+
 ;; Magit
 (defalias 'mm 'magit-mode)
 (defalias 'gs 'magit-status)
@@ -1020,6 +1023,10 @@ Emacs buffer are those starting with “*”."
 ;; ** Csv
 
 (install-package 'csv-mode)
+
+;; ** helm-ag
+
+(install-package 'helm-ag)
 
 ;; ** Outline & Outshine
 

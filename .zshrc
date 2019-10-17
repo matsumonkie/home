@@ -55,7 +55,7 @@ DISABLE_CORRECTION="true"
 
 alias -g G='| grep'
 alias -g L='| less'
-alias -g B='&& notify-send "\(^o^)/" --expire-time=1000 || notify-send "(╯°□°）╯︵ ┻━┻"'
+alias -g B='&& notify-send -u critical "\(^o^)/" --expire-time=1000 || notify-send "(╯°□°）╯︵ ┻━┻"'
 
 alias l='ls -1'
 alias rm='trash'
