@@ -98,7 +98,7 @@
 (defalias 'cma 'mc/mark-all-like-this)
 
 ;; helm-ag
-(defalias 'ag 'helm-ag)
+(defalias 'ag 'helm-ag-project-root)
 
 ;; Magit
 (defalias 'mm 'magit-mode)
@@ -901,6 +901,12 @@
 
 (install-package 'dash)
 (require 'dash)
+
+;; ** Grip
+
+;; markdown live preview in the browser
+
+(install-package 'grip-mode)
 
 ;; ** Tabbar
 
