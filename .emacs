@@ -902,6 +902,12 @@
 (install-package 'dash)
 (require 'dash)
 
+;; ** Try
+
+;; try a package without actualy installing it
+
+(install-package 'try)
+
 ;; ** Grip
 
 ;; markdown live preview in the browser
