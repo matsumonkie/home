@@ -882,6 +882,9 @@
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
 
+;; Tramp default to ssh
+(setq tramp-default-method "ssh")
+
 ;; * Plugin
 
 (message "\n -- setting plugin --\n")
@@ -1042,8 +1045,12 @@ Emacs buffer are those starting with “*”."
 
 ;; ** Outline & Outshine
 
+(setq outline-minor-mode-prefix "\M-#")
+
 (install-package 'outshine)
 (require 'outshine)
+
+(setq outshine-use-speed-commands t)
 
 (add-hook 'outline-minor-mode-hook 'outshine-mode)
 (add-hook 'prog-mode-hook 'outline-minor-mode)
@@ -1083,6 +1090,13 @@ Emacs buffer are those starting with “*”."
     ("\\(^-- \\*\\*\\*\\) "    ?✿)
     ("\\(^-- \\*\\*\\*\\*\\) " ?○)))
 
+(defconst elm-outlines-font-lock-alist
+  ;; Outlines
+  '(("\\(^-- \\*\\) "          ?■)
+    ("\\(^-- \\*\\*\\) "       ?✸)
+    ("\\(^-- \\*\\*\\*\\) "    ?✿)
+    ("\\(^-- \\*\\*\\*\\*\\) " ?○)))
+
 (defconst shell-outlines-font-lock-alist
   ;; Outlines
   '(("\\(^# \\*\\) "          ?■)
@@ -1092,6 +1106,7 @@ Emacs buffer are those starting with “*”."
 
 (add-font-locks
  '((haskell-outlines-font-lock-alist haskell-mode-hook)
+   (elm-outlines-font-lock-alist elm-mode-hook)
    (lisp-outlines-font-lock-alist emacs-lisp-mode-hook)
    (shell-outlines-font-lock-alist shell-script-mode-hook)))
 
@@ -1104,6 +1119,13 @@ Emacs buffer are those starting with “*”."
 ;; * Dev
 
 (message "\n -- setting dev --\n")
+
+
+;; ** nixos
+
+
+(install-package 'nix-mode)
+
 
 ;; ** Haskell
 
@@ -1129,7 +1151,15 @@ Emacs buffer are those starting with “*”."
 (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-tag-find)
 
 ;; somehow this settings remove the pragma: {-# LANGUAGE ViewPatterns #-} on every save...
-;;(custom-set-variables '(haskell-stylish-on-save t))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(haskell-stylish-on-save t)
+ '(package-selected-packages
+   (quote
+    (nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar grip-mode try dash))))
 
 ;;; Shortcuts
 
@@ -1222,3 +1252,10 @@ Emacs buffer are those starting with “*”."
 
 ;; Frame name = edited file name
 (setq frame-title-format '(buffer-file-name "%f"))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

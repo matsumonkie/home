@@ -119,6 +119,9 @@ alias bd='~/.kbd/kbd'
 alias fr='setxkbmap fr'
 
 # Ruby
+source /usr/local/share/chruby/chruby.sh
+chruby ruby-2.6.5
+
 alias b='bundle'
 alias be='bundle exec'
 alias bl='bundle list'
