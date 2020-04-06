@@ -885,6 +885,8 @@
 ;; Tramp default to ssh
 (setq tramp-default-method "ssh")
 
+;; connect as root to a remote ssh server: C-f /ssh:prod|sudo:root@prod:/
+
 ;; * Plugin
 
 (message "\n -- setting plugin --\n")
@@ -1043,6 +1045,14 @@ Emacs buffer are those starting with “*”."
 
 (install-package 'helm-ag)
 
+;; ** hlint
+
+(load "~/.emacs.d/hs-lint")
+
+(defun my-haskell-mode-hook ()
+    (local-set-key "\C-cl" 'hs-lint))
+(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+
 ;; ** Outline & Outshine
 
 (setq outline-minor-mode-prefix "\M-#")
@@ -1055,6 +1065,8 @@ Emacs buffer are those starting with “*”."
 (add-hook 'outline-minor-mode-hook 'outshine-mode)
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 (add-hook 'haskell-mode-hook 'outline-minor-mode)
+(add-hook 'ruby-mode-hook 'outline-minor-mode)
+(add-hook 'nix-mode-hook 'outline-minor-mode)
 
 (set-display-table-slot standard-display-table
                         'selective-display
@@ -1097,7 +1109,21 @@ Emacs buffer are those starting with “*”."
     ("\\(^-- \\*\\*\\*\\) "    ?✿)
     ("\\(^-- \\*\\*\\*\\*\\) " ?○)))
 
+(defconst ruby-outlines-font-lock-alist
+  ;; Outlines
+  '(("\\(^# \\*\\) "          ?■)
+    ("\\(^# \\*\\*\\) "       ?✸)
+    ("\\(^# \\*\\*\\*\\) "    ?✿)
+    ("\\(^# \\*\\*\\*\\*\\) " ?○)))
+
 (defconst shell-outlines-font-lock-alist
+  ;; Outlines
+  '(("\\(^# \\*\\) "          ?■)
+    ("\\(^# \\*\\*\\) "       ?✸)
+    ("\\(^# \\*\\*\\*\\) "    ?✿)
+    ("\\(^# \\*\\*\\*\\*\\) " ?○)))
+
+(defconst nix-outlines-font-lock-alist
   ;; Outlines
   '(("\\(^# \\*\\) "          ?■)
     ("\\(^# \\*\\*\\) "       ?✸)
@@ -1108,7 +1134,9 @@ Emacs buffer are those starting with “*”."
  '((haskell-outlines-font-lock-alist haskell-mode-hook)
    (elm-outlines-font-lock-alist elm-mode-hook)
    (lisp-outlines-font-lock-alist emacs-lisp-mode-hook)
-   (shell-outlines-font-lock-alist shell-script-mode-hook)))
+   (shell-outlines-font-lock-alist shell-script-mode-hook)
+   (ruby-outlines-font-lock-alist ruby-mode-hook)
+   (nix-outlines-font-lock-alist nix-mode-hook)))
 
 (defun my/haskell-mode-outline-hook ()
   ;; Set the Haskell mode outline header syntax to be "-- *"
@@ -1159,7 +1187,7 @@ Emacs buffer are those starting with “*”."
  '(haskell-stylish-on-save t)
  '(package-selected-packages
    (quote
-    (nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar grip-mode try dash))))
+    (hs-lint nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar grip-mode try dash))))
 
 ;;; Shortcuts
 
