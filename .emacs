@@ -936,19 +936,10 @@
 
 (set-face-attribute 'tabbar-default nil :weight
                     'normal :width
-                    'normal :background "blue" :underline nil)
-(set-face-attribute 'tabbar-unselected	nil :background "blue"   :foreground "white" :box nil)
-(set-face-attribute 'tabbar-selected	nil :background "yellow" :foreground "black" :box nil)
+                    'normal :background "white" :underline nil)
+(set-face-attribute 'tabbar-unselected	nil :background "white" :foreground "black" :box nil)
+(set-face-attribute 'tabbar-selected	nil :background "white" :foreground "black" :box t :underline t)
 (setq tabbar-separator '(1))
-
-;; Add a buffer modification state indicator in the tab label, and place a
-;; space around the label to make it looks less crowd.
-(defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
-  (setq ad-return-value
-        (if (and (buffer-modified-p (tabbar-tab-value tab))
-                 (buffer-file-name (tabbar-tab-value tab)))
-            (concat "*" (concat ad-return-value ""))
-          (concat "" (concat ad-return-value "")))))
 
 (defun tabbar-buffer-groups ()
   "Return the list of group names the current buffer belongs to.
@@ -1015,7 +1006,8 @@ Emacs buffer are those starting with “*”."
 
 (install-package 'expand-region)
 
-(global-set-key (kbd "M-o") 'er/expand-region)
+;;(global-set-key (kbd "M-+") 'er/expand-region)
+;;(global-set-key (kbd "M-o") 'er/contract-region)
 
 ;; ** Multiple cursor
 
@@ -1066,6 +1058,7 @@ Emacs buffer are those starting with “*”."
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 (add-hook 'haskell-mode-hook 'outline-minor-mode)
 (add-hook 'ruby-mode-hook 'outline-minor-mode)
+(add-hook 'sql-mode-hook 'outline-minor-mode)
 (add-hook 'nix-mode-hook 'outline-minor-mode)
 
 (set-display-table-slot standard-display-table
@@ -1130,11 +1123,19 @@ Emacs buffer are those starting with “*”."
     ("\\(^# \\*\\*\\*\\) "    ?✿)
     ("\\(^# \\*\\*\\*\\*\\) " ?○)))
 
+(defconst sql-outlines-font-lock-alist
+  ;; Outlines
+  '(("\\(^-- \\*\\) "          ?■)
+    ("\\(^-- \\*\\*\\) "       ?✸)
+    ("\\(^-- \\*\\*\\*\\) "    ?✿)
+    ("\\(^-- \\*\\*\\*\\*\\) " ?○)))
+
 (add-font-locks
  '((haskell-outlines-font-lock-alist haskell-mode-hook)
    (elm-outlines-font-lock-alist elm-mode-hook)
    (lisp-outlines-font-lock-alist emacs-lisp-mode-hook)
    (shell-outlines-font-lock-alist shell-script-mode-hook)
+   (sql-outlines-font-lock-alist sql-mode-hook)
    (ruby-outlines-font-lock-alist ruby-mode-hook)
    (nix-outlines-font-lock-alist nix-mode-hook)))
 
