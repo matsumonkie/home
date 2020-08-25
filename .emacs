@@ -1,5 +1,3 @@
-(package-initialize)
-
 (defvar load-my-conf t)
 
 ;; * Reset Keymaps
@@ -892,8 +890,10 @@
 (message "\n -- setting plugin --\n")
 
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
 (defun install-package (name)
@@ -906,18 +906,6 @@
 
 (install-package 'dash)
 (require 'dash)
-
-;; ** Try
-
-;; try a package without actualy installing it
-
-(install-package 'try)
-
-;; ** Grip
-
-;; markdown live preview in the browser
-
-(install-package 'grip-mode)
 
 ;; ** Tabbar
 
@@ -1039,11 +1027,11 @@ Emacs buffer are those starting with “*”."
 
 ;; ** hlint
 
-(load "~/.emacs.d/hs-lint")
+;(load "~/.emacs.d/hs-lint")
 
-(defun my-haskell-mode-hook ()
-    (local-set-key "\C-cl" 'hs-lint))
-(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+;(defun my-haskell-mode-hook ()
+;    (local-set-key "\C-cl" 'hs-lint))
+;(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
 
 ;; ** Outline & Outshine
 
@@ -1187,8 +1175,7 @@ Emacs buffer are those starting with “*”."
  ;; If there is more than one, they won't work right.
  '(haskell-stylish-on-save t)
  '(package-selected-packages
-   (quote
-    (hs-lint nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar grip-mode try dash))))
+   '(hs-lint nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar grip-mode try dash)))
 
 ;;; Shortcuts
 
@@ -1272,9 +1259,10 @@ Emacs buffer are those starting with “*”."
 (display-time)
 (setq display-time-24hr-format t)
 
-;; Line and column number enabled
+;; Line and column number enabled / highlight current line
 (column-number-mode t)
 (line-number-mode t)
+(global-hl-line-mode 1)
 
 ;; No blinking cursor
 (blink-cursor-mode nil)

@@ -1,49 +1,53 @@
 [global_config]
   handle_size = 1
   window_state = maximise
-  close_button_on_tab = False
-  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler, ActivityWatch, InactivityWatch
 [keybindings]
-  go_up = ""
-  go_down = ""
-  go_left = ""
-  go_right = ""
+  go_up = None
+  go_down = None
+  go_left = None
+  go_right = None
+  rotate_cw = None
+  rotate_ccw = None
+  toggle_scrollbar = None
+  search = None
+  toggle_zoom = None
+  scaled_zoom = None
   next_tab = <Ctrl>Tab
   prev_tab = <Ctrl><Shift>Tab
-  switch_to_tab_1 = None
-  switch_to_tab_2 = None
-  switch_to_tab_3 = None
-  switch_to_tab_4 = None
-  switch_to_tab_5 = None
-  switch_to_tab_6 = None
-  switch_to_tab_7 = None
+  full_screen = <Primary>0
+  reset = None
+  reset_clear = None
+  hide_window = None
+  group_all = None
+  ungroup_all = None
+  group_tab = None
+  ungroup_tab = None
+  new_terminator = None
   broadcast_off = None
   broadcast_group = None
   broadcast_all = None
+  insert_number = None
+  insert_padded = None
+  edit_window_title = None
+  edit_tab_title = None
+  edit_terminal_title = None
   layout_launcher = None
+  help = None
 [profiles]
   [[default]]
-    urgent_bell = True
-    icon_bell = False
     background_color = "#ffffff"
-    cursor_shape = ibeam
-    cursor_color = "#ff0000"
-    font = Monospace 12
+    cursor_color = "#aaaaaa"
+    font = Monospace 14
     foreground_color = "#000000"
     show_titlebar = False
-    scrollbar_position = hidden
-    login_shell = True
     use_system_font = False
     copy_on_selection = True
 [layouts]
   [[default]]
-    [[[child1]]]
-      parent = window0
-      profile = default
-      type = Terminal
     [[[window0]]]
-      parent = ""
       type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
 [plugins]
-  [[ActivityWatch]]
-    hush_period = 1.0

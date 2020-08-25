@@ -120,7 +120,7 @@ alias fr='setxkbmap fr'
 
 # Ruby
 source /usr/local/share/chruby/chruby.sh
-chruby ruby-2.6.5
+chruby ruby-2.7.1
 
 alias b='bundle'
 alias be='bundle exec'
@@ -131,6 +131,9 @@ alias p='cd $(git rev-parse --show-toplevel)'
 function take () {
   mkdir -p "$@" && cd "$@"
 }
+
+# nix
+source ~/.nix-profile/etc/profile.d/nix.sh
 
 alias nixe="nix-env"
 alias nixc="nix-channel"
