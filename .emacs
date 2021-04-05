@@ -1,5 +1,3 @@
-(defvar load-my-conf t)
-
 ;; * Reset Keymaps
 
 (message "\n -- resetting keymaps --\n")
@@ -29,6 +27,11 @@
 ;; * Alias
 
 (message "\n -- setting alias --\n")
+
+;; ** Centaur
+
+(defalias 'mtl 'centaur-tabs-move-current-tab-to-left)
+(defalias 'mtr 'centaur-tabs-move-current-tab-to-right)
 
 ;; ** Outline
 
@@ -80,7 +83,7 @@
 (defalias 'mwb 'mark-whole-bufferi)
 (defalias 'kb 'ido-kill-buffer)
 (defalias 'reload 'revert-buffer)
-(defalias 'ib 'indent-buffer)
+(defalias 'ib 'my-indent-buffer)
 
 ;; Narrow
 (defalias 'nr  'narrow-to-region)
@@ -119,21 +122,9 @@
 ;; visual line mode
 (defalias 'vlm 'visual-line-mode)
 
-;; artist mode
-(defalias 'draw 'artist-select-operation)
-
-;; vimish fold
-(defalias 'fold 'vimish-fold)
-(defalias 'unfold 'vimish-fold-unfold)
-
 ;; * Function
 
 (message "\n -- setting functions --\n")
-
-(defun indent-buffer ()
-  (interactive)
-  (save-excursion
-    (indent-region (point-min) (point-max) nil)))
 
 (defun my-kill-buffer ()
   "kill current buffer without asking if it's the good one"
@@ -150,38 +141,6 @@
   (if (equal (point) (line-beginning-position))
       (kill-whole-line)
     (kill-line)))
-
-(defun window-half-height ()
-  (max 1 (/ (1- (window-height (selected-window))) 2)))
-
-(defun scroll-up-half ()
-  (interactive)
-  (scroll-up (window-half-height)))
-
-(defun scroll-down-half ()
-  (interactive)
-  (scroll-down (window-half-height)))
-
-(defun insert-comment ()
-  "comment with /* */"
-  (interactive)
-  (if (region-active-p)
-      (beginning-of-line)
-    (insert "/*")
-    (end-of-line)
-    (insert "*/")))
-
-(defun comment-line ()
-  "Comments the current line"
-  (interactive)
-  (condition-case nil
-      (comment-region (point-at-bol) (point-at-eol)) (error nil)))
-
-(defun uncomment-line ()
-  "Comments the current line and goes to the next one"
-  (interactive)
-  (condition-case nil
-      (uncomment-region (point-at-bol) (point-at-eol)) (error nil)))
 
 (defun my-copy-line ()
   "Copy current line in the kill ring"
@@ -346,27 +305,6 @@
       (setq end (point))
       (my-align-vars beg end))))
 
-(defun my-comment()
-  "Comment or uncomment line or region"
-  (interactive)
-  ;; check if we need to comment or uncomment
-  (setq comment t)
-  (save-excursion
-    (beginning-of-line)
-    (save-excursion
-      (if (region-active-p)
-	  (goto-char (region-beginning)))
-      (if (search-forward-regexp "\\(//\\)\\|\\(/\\*\\)" (line-end-position) t)
-	  (setq comment nil)))
-    (if comment
-	(if (region-active-p)
-	    (comment-region (region-beginning) (region-end))
-	  (comment-line))
-      (progn
-	(if (region-active-p)
-	    (uncomment-region (region-beginning) (region-end))
-	  (uncomment-line))))))
-
 (defun beginning-of-next-line()
   "Moves cursor to the beginning of the next line, or nowhere if at end of the buffer"
   (interactive)
@@ -475,44 +413,6 @@
                (set-buffer-modified-p nil)
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
-;; Folding
-
-(defun my-fold-toggle ()
-  "toggle fold/unfold of paragraph under the mark"
-  (interactive)
-  (let
-      ((overlays (overlays-at (point))))
-    (if overlays
-        (if (not (-map 'my-fold (overlays-at (point))))
-            (progn
-              (message "")
-              (my-fold-paragraph)))
-      (if (use-region-p)
-          (progn
-            (message "folding manual region")
-            (vimish-fold beginning end))
-        (my-fold-paragraph)))))
-
-(defun my-fold (overlay)
-  ""
-  (if (folded-region-p overlay)
-      (vimish-fold-unfold)
-    (if (unfolded-region-p overlay)
-        (vimish-fold-toggle))))
-
-(defun folded-region-p (overlay)
-  ""
-  (eq (overlay-get overlay 'type) 'vimish-fold--folded))
-
-(defun unfolded-region-p (overlay)
-  ""
-  (eq (overlay-get overlay 'type) 'vimish-fold--unfolded))
-
-(defun my-fold-paragraph ()
-  ""
-  (mark-paragraph)
-  (forward-line)
-  (vimish-fold (region-beginning) (region-end)))
 
 ;; * Shortcut
 
@@ -620,12 +520,6 @@
 (global-set-key (kbd "C-SPC r d") 'kill-rectangle) 	;; supprime un rectangle sans l'enregistrer
 (global-set-key (kbd "C-SPC r t") 'string-rectangle)   	;; insérer un string dans un rectangle
 
-
-;;;;;;;;;;;;;;;;;;
-;; DISPLACEMENT ;;
-;;;;;;;;;;;;;;;;;;
-
-
 ;;;;;;;;;;
 ;; WORD ;;
 ;;;;;;;;;;
@@ -642,22 +536,13 @@
 (global-set-key "\M-d" 'beginning-of-buffer)
 (global-set-key "\M-l" 'end-of-buffer)
 
-;; PAGE
-(global-set-key "\M-t" 'scroll-down-command)
-(global-set-key "\M-n" 'scroll-up-command)
-
-
 
 ;;;;;;;;;
 ;; DEV ;;
 ;;;;;;;;;
 
 
-(define-key global-map (kbd "C-SPC .") 'comment-line)
-(define-key global-map (kbd "C-SPC :") 'uncomment-line)
-
 (keyboard-translate ?\C-y ?\C-é)
-                                        ;(global-set-key (kbd "é") "y")
 (global-set-key (kbd "C-y") 'my-copy-line)
 
 (global-set-key (kbd "C-SPC i") 'indent-region)
@@ -682,12 +567,12 @@
 
 
 ;; Same with return and C-m
-                                        ;(keyboard-translate ?\C-m ?\C-&)
-                                        ;(global-set-key (kbd "C-&") 'newline-and-indent)
-                                        ;(global-set-key (kbd "RET") 'newline-and-indent)
+;;(keyboard-translate ?\C-m ?\C-&)
+;;(global-set-key (kbd "C-&") 'newline-and-indent)
+;;(global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "RET") 'newline-and-indent)
 ;; Same with C-c which is a prefix key
-                                        ;(keyboard-translate ?\C-j ?\C-.)
+;;(keyboard-translate ?\C-j ?\C-.)
 (global-unset-key (kbd "C-@ C-@"))
 (global-set-key (kbd "C-SPC C-SPC") 'execute-extended-command)
 
@@ -705,10 +590,10 @@
 (global-set-key (kbd "M-<down>") 'move-line-region-down)
 (global-set-key (kbd "M-<up>") 'move-line-region-up)
 
-(global-set-key (kbd "M-S-t") 'tabbar-backward-group)
-(global-set-key (kbd "M-S-n") 'tabbar-forward-group)
-(global-set-key "\M-t" 'tabbar-backward-tab)
-(global-set-key "\M-n" 'tabbar-forward-tab)
+;;(global-set-key (kbd "M-S-t") 'tabbar-backward-group)
+;;(global-set-key (kbd "M-S-n") 'tabbar-forward-group)
+;;(global-set-key "\M-t" 'tabbar-backward-tab)
+;;(global-set-key "\M-n" 'tabbar-forward-tab)
 
 ;;;;;;;;;;;;;;;
 ;; Recherche ;;
@@ -795,8 +680,10 @@
 ;; Scroll behaviour
 (setq redisplay-dont-pause t
       scroll-margin 1
+      ;; content moves of only one line at end of windown
       scroll-step 1
       scroll-conservatively 10000
+      ;; Cursor position fixed when page is scrolled
       scroll-preserve-screen-position 1)
 
 ;; No carriage return for long line
@@ -807,16 +694,10 @@
     (setq auto-hscroll-mode 1)
     (setq automatic-hscrolling t)))
 
-;; le contenu se déplace d'une seule ligne en fin de fenetre
-                                        ;(setq scroll-step 1)
-
 ;; No visual alert
 (setq visible-bell 'nil)
 
-;; Cursor position fixed when page is scrolled
-                                        ;(setq scroll-preserve-screen-position t)
-
-                                        ; Save cursor position and load it automatically when opening file
+;; Save cursor position and load it automatically when opening file
 (setq save-place-file (concat user-emacs-directory "saveplace"))
 (setq-default save-place t)
 (require 'saveplace)
@@ -837,7 +718,6 @@
 (setq blink-matching-paren t
       blink-matching-paren-on-screen t
       blink-matching-paren-dont-ignore-comments t)
-                                        ;(set-face-background 'show-paren-match-face "green")
 
 ;; Automatic completion
 (require 'dabbrev)
@@ -874,9 +754,6 @@
 ;; Indent with space only
 (setq-default indent-tabs-mode nil)
 
-;; No scratch buffer
-;;(kill-buffer "*scratch*")
-
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
 
@@ -891,9 +768,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
 (defun install-package (name)
@@ -909,46 +783,46 @@
 
 ;; ** Tabbar
 
-(install-package 'tabbar)
-(require 'tabbar)
-(tabbar-mode)
-
-(setq
- tabbar-scroll-left-help-function  nil   ; do not show help information
- tabbar-scroll-right-help-function nil
- tabbar-help-on-tab-function       nil
- tabbar-home-help-function         nil
- tabbar-buffer-home-button  (quote (("") "")) ; do not show tabbar button
- tabbar-scroll-left-button  (quote (("") ""))
- tabbar-scroll-right-button (quote (("") "")))
-
-(set-face-attribute 'tabbar-default nil :weight
-                    'normal :width
-                    'normal :background "white" :underline nil)
-(set-face-attribute 'tabbar-unselected	nil :background "white" :foreground "black" :box nil)
-(set-face-attribute 'tabbar-selected	nil :background "white" :foreground "black" :box t :underline t)
-(setq tabbar-separator '(1))
-
-(defun tabbar-buffer-groups ()
-  "Return the list of group names the current buffer belongs to.
-This function is a custom function for tabbar-mode's tabbar-buffer-groups.
-This function group all buffers into 3 groups:
-Those Dired, those user buffer, and those emacs buffer.
-Emacs buffer are those starting with “*”."
-  (list
-   (cond
-    ((string-equal "*" (substring (buffer-name) 0 1))
-     "Emacs Buffer"
-     )
-    ((eq major-mode 'dired-mode)
-     "Dired"
-     )
-    (t
-     "User Buffer"
-     )
-    )))
-
-(setq tabbar-buffer-groups-function 'tabbar-buffer-groups)
+;;(install-package 'tabbar)
+;;(require 'tabbar)
+;;(tabbar-mode)
+;;
+;;(setq
+;; tabbar-scroll-left-help-function  nil   ; do not show help information
+;; tabbar-scroll-right-help-function nil
+;; tabbar-help-on-tab-function       nil
+;; tabbar-home-help-function         nil
+;; tabbar-buffer-home-button  (quote (("") "")) ; do not show tabbar button
+;; tabbar-scroll-left-button  (quote (("") ""))
+;; tabbar-scroll-right-button (quote (("") "")))
+;;
+;;(set-face-attribute 'tabbar-default nil :weight
+;;                    'normal :width
+;;                    'normal :background "white" :underline nil)
+;;(set-face-attribute 'tabbar-unselected	nil :background "white" :foreground "black" :box nil)
+;;(set-face-attribute 'tabbar-selected	nil :background "white" :foreground "black" :box t :underline t)
+;;(setq tabbar-separator '(1))
+;;
+;;(defun tabbar-buffer-groups ()
+;;  "Return the list of group names the current buffer belongs to.
+;;This function is a custom function for tabbar-mode's tabbar-buffer-groups.
+;;This function group all buffers into 3 groups:
+;;Those Dired, those user buffer, and those emacs buffer.
+;;Emacs buffer are those starting with “*”."
+;;  (list
+;;   (cond
+;;    ((string-equal "*" (substring (buffer-name) 0 1))
+;;     "Emacs Buffer"
+;;     )
+;;    ((eq major-mode 'dired-mode)
+;;     "Dired"
+;;     )
+;;    (t
+;;     "User Buffer"
+;;     )
+;;    )))
+;;
+;;(setq tabbar-buffer-groups-function 'tabbar-buffer-groups)
 
 ;; ** Ido
 
@@ -994,8 +868,8 @@ Emacs buffer are those starting with “*”."
 
 (install-package 'expand-region)
 
-;;(global-set-key (kbd "M-+") 'er/expand-region)
-;;(global-set-key (kbd "M-o") 'er/contract-region)
+;;(global-set-key (kbd "M-o") 'er/expand-region)
+;;(global-set-key (kbd "M-O") 'er/contract-region)
 
 ;; ** Multiple cursor
 
@@ -1027,27 +901,27 @@ Emacs buffer are those starting with “*”."
 
 ;; ** hlint
 
-;(load "~/.emacs.d/hs-lint")
+;;(load "~/.emacs.d/hs-lint")
 
-;(defun my-haskell-mode-hook ()
-;    (local-set-key "\C-cl" 'hs-lint))
-;(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+;;(defun my-haskell-mode-hook ()
+;;    (local-set-key "\C-cl" 'hs-lint))
+;;(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
 
-;; ** Outline & Outshine
+;; ** Outline
 
 (setq outline-minor-mode-prefix "\M-#")
 
-(install-package 'outshine)
-(require 'outshine)
+;;(install-package 'outshine)
+;;(require 'outshine)
 
-(setq outshine-use-speed-commands t)
+;;(setq outshine-use-speed-commands t)
 
-(add-hook 'outline-minor-mode-hook 'outshine-mode)
-(add-hook 'prog-mode-hook 'outline-minor-mode)
-(add-hook 'haskell-mode-hook 'outline-minor-mode)
-(add-hook 'ruby-mode-hook 'outline-minor-mode)
-(add-hook 'sql-mode-hook 'outline-minor-mode)
-(add-hook 'nix-mode-hook 'outline-minor-mode)
+;;(add-hook 'outline-minor-mode-hook 'outshine-mode)
+;;(add-hook 'prog-mode-hook 'outline-minor-mode)
+;;(add-hook 'haskell-mode-hook 'outline-minor-mode)
+;;(add-hook 'ruby-mode-hook 'outline-minor-mode)
+;;(add-hook 'sql-mode-hook 'outline-minor-mode)
+;;(add-hook 'nix-mode-hook 'outline-minor-mode)
 
 (set-display-table-slot standard-display-table
                         'selective-display
@@ -1127,11 +1001,23 @@ Emacs buffer are those starting with “*”."
    (ruby-outlines-font-lock-alist ruby-mode-hook)
    (nix-outlines-font-lock-alist nix-mode-hook)))
 
-(defun my/haskell-mode-outline-hook ()
-  ;; Set the Haskell mode outline header syntax to be "-- *"
-  (setq outshine-preserve-delimiter-whitespace t))
+;;(defun my/haskell-mode-outline-hook ()
+;; Set the Haskell mode outline header syntax to be "-- *"
+;;  (setq outshine-preserve-delimiter-whitespace t))
 
-(add-hook 'haskell-mode-hook 'my/haskell-mode-outline-hook)
+;;(add-hook 'haskell-mode-hook 'my/haskell-mode-outline-hook)
+
+;; Centaur tabs
+
+(install-package 'centaur-tabs)
+(require 'centaur-tabs)
+
+(centaur-tabs-mode t)
+(global-set-key (kbd "M-t")  'centaur-tabs-backward)
+(global-set-key (kbd "M-n") 'centaur-tabs-forward)
+(setq centaur-tabs-set-modified-marker t
+      centaur-tabs-modified-marker "*"
+      centaur-tabs-set-close-button nil)
 
 ;; * Dev
 
@@ -1168,14 +1054,31 @@ Emacs buffer are those starting with “*”."
 (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-tag-find)
 
 ;; somehow this settings remove the pragma: {-# LANGUAGE ViewPatterns #-} on every save...
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(haskell-stylish-on-save t)
- '(package-selected-packages
-   '(hs-lint nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar grip-mode try dash)))
+                                        ;(custom-set-variables
+;; custom-set-variables was added by Custom.
+;; If you edit it by hand, you could mess it up, so be careful.
+;; Your init file should contain only one such instance.
+;; If there is more than one, they won't work right.
+                                        ; '(haskell-stylish-on-save t)
+                                        ; '(package-selected-packages
+                                        ;   '(lsp-mode hs-lint nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido grip-mode try dash)))
+
+
+;; ** Lsp - language server protocol
+
+;; A modern list api for Emacs
+
+(install-package 'lsp-mode)
+(install-package 'lsp-haskell)
+
+(require 'lsp-mode)
+(add-hook 'haskell-mode-hook #'lsp)
+(require 'lsp-haskell)
+
+(add-hook 'haskell-literate-mode-hook #'lsp)
+(setq lsp-keymap-prefix (kbd "C-b"))
+
+(setq lsp-log-io nil) ; if set to true can cause a performance hit
 
 ;;; Shortcuts
 
@@ -1190,7 +1093,7 @@ Emacs buffer are those starting with “*”."
 
 (define-key haskell-mode-map (kbd "M-s") 'haskell-interactive-mode-history-previous)
 (define-key haskell-mode-map (kbd "M-r") 'haskell-interactive-mode-history-next)
-(define-key haskell-cabal-mode-map (kbd "M-m") 'tabbar-forward-tab)
+                                        ;(define-key haskell-cabal-mode-map (kbd "M-m") 'tabbar-forward-tab)
 
 (defun my-haskell-process-load-file ()
   (interactive)
@@ -1275,4 +1178,15 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(centaur-tabs-default ((t (:background "brightcyan"))))
+ '(centaur-tabs-selected ((t (:background "cornflowerblue" :foreground "white"))))
+ '(centaur-tabs-selected-modified ((t (:background "cornflowerblue" :foreground "white"))))
+ '(centaur-tabs-unselected ((t (:background "gainsboro" :foreground "black"))))
+ '(centaur-tabs-unselected-modified ((t nil))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash)))
