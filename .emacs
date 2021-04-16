@@ -459,9 +459,11 @@
 ;; WINDOWS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key "\M-b" 'next-buffer)
+(global-set-key "\M-b" 'next-buffer)
+(global-set-key (kbd "C-SPC O") 'previous-multiframe-window)
 (global-set-key [f12] 'repeat-complex-command)
-(global-set-key (kbd "C-SPC p") 'previous-multiframe-window)
 (global-set-key (kbd "C-SPC n") 'next-multiframe-window)
+(global-set-key (kbd "C-SPC p") 'previous-multiframe-window)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MINIBUFFER HISTORY
