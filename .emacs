@@ -553,20 +553,22 @@
 (global-set-key (kbd "C-SPC C-u")  'uncomment-region)
 
 ;; Behaviour for emacs in terminal
-(if (display-graphic-p)
-    (progn
-      ;; shortcut terminator like :)
-      (global-set-key (kbd "C-S-h") 'split-window-vertically)
-      (global-set-key (kbd "C-S-v") 'split-window-horizontally)
-      (global-set-key (kbd "C-S-r") 'windmove-right)
-      (global-set-key (kbd "C-S-s") 'windmove-left)
-      (global-set-key (kbd "C-S-n") 'windmove-down)
-      (global-set-key (kbd "C-S-t") 'windmove-up)
-      (global-set-key (kbd "C-S-d") 'delete-window))
-  ;; else console mode
-  (global-unset-key (kbd "C-@"))
-  (global-set-key (kbd "C-@") 'Control-X-prefix))
-
+;(if (display-graphic-p)
+;    (progn
+;      ;; shortcut terminator like :)
+;      (global-set-key (kbd "C-S-h") 'split-window-vertically)
+;      (global-set-key (kbd "C-S-v") 'split-window-horizontally)
+;      (global-set-key (kbd "C-S-r") 'windmove-right)
+;      (global-set-key (kbd "C-S-s") 'windmove-left)
+;      (global-set-key (kbd "C-S-n") 'windmove-down)
+;      (global-set-key (kbd "C-S-t") 'windmove-up)
+;      (global-set-key (kbd "C-S-d") 'delete-window))
+;  ;; else console mode
+;  (global-unset-key (kbd "C-@"))
+;  (global-set-key (kbd "C-@") 'Control-X-prefix))
+;
+(global-unset-key (kbd "C-@"))
+(global-set-key (kbd "C-@") 'Control-X-prefix)
 
 ;; Same with return and C-m
 ;;(keyboard-translate ?\C-m ?\C-&)
@@ -631,6 +633,13 @@
 ;; * System
 
 (message "\n -- setting system --\n")
+
+(setq gc-cons-threshold 100000000) ;; speed up heavy processes (e.g: lsp)
+;; Maximum number of bytes to read from subprocess in a single chunk.
+;; Enlarge the value only if the subprocess generates very large (megabytes) amounts of data in one go.
+(setq read-process-output-max (* 1024 1024)) ;; 1 mb (default value is 4096)
+
+
 
 ;; Fast boot
 (modify-frame-parameters nil '((wait-for-wm . nil)))
@@ -775,6 +784,10 @@
 (defun install-package (name)
   (unless (package-installed-p name)
     (package-refresh-contents) (package-install name)))
+
+;; * use package
+
+(install-package 'use-package)
 
 ;; ** Dash
 
@@ -1013,7 +1026,7 @@
 
 (install-package 'centaur-tabs)
 (require 'centaur-tabs)
-
+(centaur-tabs-headline-match)
 (centaur-tabs-mode t)
 (global-set-key (kbd "M-t")  'centaur-tabs-backward)
 (global-set-key (kbd "M-n") 'centaur-tabs-forward)
@@ -1072,15 +1085,24 @@
 
 (install-package 'lsp-mode)
 (install-package 'lsp-haskell)
+(install-package 'lsp-ui)
 
 (require 'lsp-mode)
 (add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'haskell-literate-mode-hook #'lsp)
+
 (require 'lsp-haskell)
 
-(add-hook 'haskell-literate-mode-hook #'lsp)
-(setq lsp-keymap-prefix (kbd "C-b"))
 
-(setq lsp-log-io nil) ; if set to true can cause a performance hit
+(setq lsp-enable-file-watchers nil) ; not sure why we would need this but enabling this on big project slows down everything considerably
+
+(setq lsp-keymap-prefix "C-b")
+(define-key lsp-mode-map (kbd "C-b") lsp-command-map)
+(define-key lsp-command-map (kbd "e") 'lsp-execute-code-action)
+(define-key lsp-mode-map (kbd "r") 'lsp-find-references)
+(define-key lsp-command-map (kbd "d") 'lsp-find-definition)
+
+;(setq lsp-keymap-prefix (kbd "C-c C-l"))
 
 ;;; Shortcuts
 
@@ -1175,20 +1197,30 @@
 ;; Frame name = edited file name
 (setq frame-title-format '(buffer-file-name "%f"))
 
+;; * Themes
+
+(install-package 'doom-themes)
+
+(load-theme 'doom-one-light t)
+
+;; * Custom
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(centaur-tabs-default ((t (:background "brightcyan"))))
- '(centaur-tabs-selected ((t (:background "cornflowerblue" :foreground "white"))))
- '(centaur-tabs-selected-modified ((t (:background "cornflowerblue" :foreground "white"))))
- '(centaur-tabs-unselected ((t (:background "gainsboro" :foreground "black"))))
- '(centaur-tabs-unselected-modified ((t nil))))
+ '(centaur-tabs-default ((t (:background "#f0f0f0"))))
+ '(centaur-tabs-selected ((t (:background "sky blue" :foreground "black"))))
+ '(centaur-tabs-selected-modified ((t (:background "sky blue" :foreground "black"))))
+ '(centaur-tabs-unselected ((t (:background "#f0f0f0" :foreground "black"))))
+ '(centaur-tabs-unselected-modified ((t (:background "#f0f0f0" :foreground "black")))))
+ '(centaur-tabs-default ((t (:background "#f0f0f0"))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(lsp-enable-file-watchers nil)
  '(package-selected-packages
-   '(centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash)))
+   '(use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash)))
