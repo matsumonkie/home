@@ -1099,7 +1099,7 @@
 (setq lsp-keymap-prefix "C-b")
 (define-key lsp-mode-map (kbd "C-b") lsp-command-map)
 (define-key lsp-command-map (kbd "e") 'lsp-execute-code-action)
-(define-key lsp-mode-map (kbd "r") 'lsp-find-references)
+(define-key lsp-command-map (kbd "r") 'lsp-find-references)
 (define-key lsp-command-map (kbd "d") 'lsp-find-definition)
 
 ;(setq lsp-keymap-prefix (kbd "C-c C-l"))
