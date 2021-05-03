@@ -1079,6 +1079,13 @@
                                         ;   '(lsp-mode hs-lint nix-mode haskell-mode outshine helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido grip-mode try dash)))
 
 
+;; ** git link
+
+(install-package 'git-link)
+
+(defalias 'gl 'git-link)
+(defalias 'glc 'git-link-commit)
+
 ;; ** Lsp - language server protocol
 
 ;; A modern list api for Emacs
@@ -1117,7 +1124,7 @@
 
 (define-key haskell-mode-map (kbd "M-s") 'haskell-interactive-mode-history-previous)
 (define-key haskell-mode-map (kbd "M-r") 'haskell-interactive-mode-history-next)
-                                        ;(define-key haskell-cabal-mode-map (kbd "M-m") 'tabbar-forward-tab)
+(define-key haskell-cabal-mode-map (kbd "M-n") 'centaur-tabs-forward)
 
 (defun my-haskell-process-load-file ()
   (interactive)
@@ -1223,4 +1230,4 @@
  ;; If there is more than one, they won't work right.
  '(lsp-enable-file-watchers nil)
  '(package-selected-packages
-   '(use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash)))
+   '(git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash)))
