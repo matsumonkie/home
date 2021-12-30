@@ -804,6 +804,7 @@
 (global-set-key (kbd "M-m") 'bm-toggle)
 (global-set-key (kbd "M-N") 'bm-next)
 (global-set-key (kbd "M-T") 'bm-previous)
+(setq bm-highlight-style 'bm-highlight-only-line) ;;default, the last one in the pic
 
 ;; ** Tabbar
 
@@ -1234,6 +1235,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(bm-face ((t (:background "gray88" :foreground "black"))))
  '(centaur-tabs-default ((t (:background "#f0f0f0"))))
  '(centaur-tabs-selected ((t (:background "sky blue" :foreground "black"))))
  '(centaur-tabs-selected-modified ((t (:background "sky blue" :foreground "black"))))
