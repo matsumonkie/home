@@ -796,6 +796,15 @@
 (install-package 'dash)
 (require 'dash)
 
+;; ** bm - bookmark
+
+(install-package 'bm)
+(require 'bm)
+
+(global-set-key (kbd "M-m") 'bm-toggle)
+(global-set-key (kbd "M-N") 'bm-next)
+(global-set-key (kbd "M-T") 'bm-previous)
+
 ;; ** Tabbar
 
 ;;(install-package 'tabbar)
@@ -1032,7 +1041,8 @@
 (global-set-key (kbd "M-n") 'centaur-tabs-forward)
 (setq centaur-tabs-set-modified-marker t
       centaur-tabs-modified-marker "*"
-      centaur-tabs-set-close-button nil)
+      centaur-tabs-set-close-button nil
+      centaur-tabs-cycle-scope 'tabs)
 
 ;; * Dev
 
@@ -1086,6 +1096,12 @@
 (defalias 'gl 'git-link)
 (defalias 'glc 'git-link-commit)
 
+
+;; ** Ripgrep
+
+(install-package 'rg)
+(require 'rg)
+
 ;; ** Lsp - language server protocol
 
 ;; A modern list api for Emacs
@@ -1096,6 +1112,7 @@
 
 (require 'lsp-mode)
 (add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'elm-mode-hook #'lsp)
 (add-hook 'haskell-literate-mode-hook #'lsp)
 
 (require 'lsp-haskell)
@@ -1230,4 +1247,5 @@
  ;; If there is more than one, they won't work right.
  '(lsp-enable-file-watchers nil)
  '(package-selected-packages
-   '(git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash)))
+   '(rip-grep git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash))
+ '(warning-suppress-types '((comp))))
