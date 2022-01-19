@@ -906,6 +906,8 @@
 
 ;; prevent instructions from being shown at startup
 (setq magit-last-seen-setup-instructions "1.4.0")
+;; show magit on full screen when invoking it
+(setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
 
 ;; ** Github markdown
 
