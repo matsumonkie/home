@@ -589,7 +589,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key [(f1)] 'dabbrev-completion)
 (global-set-key (kbd "C-q") 'dabbrev-expand)
-(global-set-key (kbd "M-q") 'dabbrev-completion)
 
 (global-set-key (kbd "M-<down>") 'move-line-region-down)
 (global-set-key (kbd "M-<up>") 'move-line-region-up)
@@ -805,6 +804,16 @@
 (global-set-key (kbd "M-N") 'bm-next)
 (global-set-key (kbd "M-T") 'bm-previous)
 (setq bm-highlight-style 'bm-highlight-only-line) ;;default, the last one in the pic
+
+;; ** yasnippet
+
+(install-package 'yasnippet)
+(install-package 'yasnippet-snippets)
+(require 'yasnippet)
+(yas-global-mode 1)
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+(define-key yas-minor-mode-map (kbd "M-q") #'yas-expand)
+;; to show available snippets in current mode: M-x yas-describe-tables
 
 ;; ** Tabbar
 
@@ -1251,5 +1260,5 @@
  ;; If there is more than one, they won't work right.
  '(lsp-enable-file-watchers nil)
  '(package-selected-packages
-   '(rip-grep git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash))
+   '(yasnippet-snippets yasnippet rip-grep git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash))
  '(warning-suppress-types '((comp))))
