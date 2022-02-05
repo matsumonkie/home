@@ -815,49 +815,6 @@
 (define-key yas-minor-mode-map (kbd "M-q") #'yas-expand)
 ;; to show available snippets in current mode: M-x yas-describe-tables
 
-;; ** Tabbar
-
-;;(install-package 'tabbar)
-;;(require 'tabbar)
-;;(tabbar-mode)
-;;
-;;(setq
-;; tabbar-scroll-left-help-function  nil   ; do not show help information
-;; tabbar-scroll-right-help-function nil
-;; tabbar-help-on-tab-function       nil
-;; tabbar-home-help-function         nil
-;; tabbar-buffer-home-button  (quote (("") "")) ; do not show tabbar button
-;; tabbar-scroll-left-button  (quote (("") ""))
-;; tabbar-scroll-right-button (quote (("") "")))
-;;
-;;(set-face-attribute 'tabbar-default nil :weight
-;;                    'normal :width
-;;                    'normal :background "white" :underline nil)
-;;(set-face-attribute 'tabbar-unselected	nil :background "white" :foreground "black" :box nil)
-;;(set-face-attribute 'tabbar-selected	nil :background "white" :foreground "black" :box t :underline t)
-;;(setq tabbar-separator '(1))
-;;
-;;(defun tabbar-buffer-groups ()
-;;  "Return the list of group names the current buffer belongs to.
-;;This function is a custom function for tabbar-mode's tabbar-buffer-groups.
-;;This function group all buffers into 3 groups:
-;;Those Dired, those user buffer, and those emacs buffer.
-;;Emacs buffer are those starting with “*”."
-;;  (list
-;;   (cond
-;;    ((string-equal "*" (substring (buffer-name) 0 1))
-;;     "Emacs Buffer"
-;;     )
-;;    ((eq major-mode 'dired-mode)
-;;     "Dired"
-;;     )
-;;    (t
-;;     "User Buffer"
-;;     )
-;;    )))
-;;
-;;(setq tabbar-buffer-groups-function 'tabbar-buffer-groups)
-
 ;; ** Ido
 
 ;; auto completion a la Sublime when searching for files
@@ -1264,5 +1221,5 @@
  ;; If there is more than one, they won't work right.
  '(lsp-enable-file-watchers nil)
  '(package-selected-packages
-   '(yasnippet-snippets yasnippet rip-grep git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash))
+   '(perspective yasnippet-snippets yasnippet rip-grep git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash))
  '(warning-suppress-types '((comp))))
