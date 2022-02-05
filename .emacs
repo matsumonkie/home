@@ -901,13 +901,17 @@
 ;; incrementally expand region to word -> string -> paragraph -> ...
 
 (install-package 'expand-region)
-
 ;;(global-set-key (kbd "M-o") 'er/expand-region)
 ;;(global-set-key (kbd "M-O") 'er/contract-region)
+
+
 
 ;; ** Multiple cursor
 
 (install-package 'multiple-cursors)
+
+(global-set-key (kbd "M-S-<down>") 'mc/mark-next-like-this)
+(global-set-key (kbd "M-S-<up>") 'mc/unmark-next-like-this)
 
 ;; ** Magit
 
