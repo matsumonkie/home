@@ -157,6 +157,36 @@
   (interactive)
   (forward-line 2))
 
+(defun my-comment-line (n)
+  "Comment or uncomment current line.
+With positive prefix, apply to N lines including current one.
+With negative prefix, apply to -N lines above.  Also, further
+consecutive invocations of this command will inherit the negative
+argument.
+
+If region is active, comment lines in active region instead.
+Unlike `comment-dwim', this always comments whole lines."
+  (interactive "p")
+  (if (use-region-p)
+      (comment-or-uncomment-region
+       (save-excursion
+         (goto-char (region-beginning))
+         (line-beginning-position))
+       (save-excursion
+         (goto-char (region-end))
+         (line-end-position)))
+    (when (and (eq last-command 'comment-line-backward)
+               (natnump n))
+      (setq n (- n)))
+    (let ((range
+           (list (line-beginning-position)
+                 (goto-char (line-end-position n)))))
+      (comment-or-uncomment-region
+       (apply #'min range)
+       (apply #'max range)))
+    (back-to-indentation)
+    (unless (natnump n) (setq this-command 'comment-line-backward))))
+
 (defun move-line (n)
   "Move the current line up or down by N lines."
   (interactive "p")
@@ -466,8 +496,7 @@
 
 (global-set-key (kbd "C-SPC i") 'indent-region)
 
-(global-set-key (kbd "C-SPC C-c")  'comment-region)
-(global-set-key (kbd "C-SPC C-u")  'uncomment-region)
+(global-set-key (kbd "C-SPC C-c")  'my-comment-line)
 
 (global-unset-key (kbd "C-@"))
 (global-set-key (kbd "C-@") 'Control-X-prefix)
