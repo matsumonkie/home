@@ -207,24 +207,11 @@
     (move-line-up n)
     ))
 
-(defun move-line-region-up (start end n)
-  (interactive "r\np")
-  (if (use-region-p)
-      (move-region-up start end n)
-    (move-line-up n)
-    ))
-
 (defun move-line-region-down (start end n)
   (interactive "r\np")
   (if (use-region-p)
       (move-region-down start end n)
     (move-line-down n)))
-
-(defun my-comment ()
-  "comment or uncomment the current line or region"
-  (interactive)
-  (save-excursion
-    ;; (comment-line))
 
 (defun my-horizontal-recenter ()
   "make the cursor horizontally centered in the window"
@@ -286,6 +273,7 @@
         (progn (goto-char (point-min))
                (setq ξi φn)))
       (setq ξi (1+ ξi)))))
+
 
 ;; install xsel
 (defun copy-to-clipboard ()
@@ -418,14 +406,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hack to solve problem for tab and C-i
-;;(global-set-key "\t" 'self-insert-command)
+                                        ;(global-set-key "\t" 'self-insert-command)
 
 (global-set-key (kbd "C-i") 'backward-kill-word)
 (global-set-key (kbd "C-o") 'repeat)
 
-;;(keyboard-translate ?\C-i ?\M-|)
-;;(global-set-key [?\M-|] 'backward-kill-word)
-;;(global-set-key "¿" 'tab-to-tab-stop)
+                                        ;(keyboard-translate ?\C-i ?\M-|)
+                                        ;(global-set-key [?\M-|] 'backward-kill-word)
+                                        ;(global-set-key "¿" 'tab-to-tab-stop)
 
 (global-set-key "\C-u" 	  'kill-word)
 (global-set-key "\M-i" 	  'my-backward-kill-line)
@@ -478,10 +466,8 @@
 
 (global-set-key (kbd "C-SPC i") 'indent-region)
 
-(global-set-key (kbd "C-SPC C-c")  'my-comment)
-(global-set-key (kbd "C-SPC C-u")  'my-uncomment)
-;;(global-set-key (kbd "C-SPC C-c")  'comment-region)
-;;(global-set-key (kbd "C-SPC C-u")  'uncomment-region)
+(global-set-key (kbd "C-SPC C-c")  'comment-region)
+(global-set-key (kbd "C-SPC C-u")  'uncomment-region)
 
 (global-unset-key (kbd "C-@"))
 (global-set-key (kbd "C-@") 'Control-X-prefix)
