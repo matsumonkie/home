@@ -552,21 +552,6 @@
 (global-set-key (kbd "C-SPC C-c")  'comment-region)
 (global-set-key (kbd "C-SPC C-u")  'uncomment-region)
 
-;; Behaviour for emacs in terminal
-;(if (display-graphic-p)
-;    (progn
-;      ;; shortcut terminator like :)
-;      (global-set-key (kbd "C-S-h") 'split-window-vertically)
-;      (global-set-key (kbd "C-S-v") 'split-window-horizontally)
-;      (global-set-key (kbd "C-S-r") 'windmove-right)
-;      (global-set-key (kbd "C-S-s") 'windmove-left)
-;      (global-set-key (kbd "C-S-n") 'windmove-down)
-;      (global-set-key (kbd "C-S-t") 'windmove-up)
-;      (global-set-key (kbd "C-S-d") 'delete-window))
-;  ;; else console mode
-;  (global-unset-key (kbd "C-@"))
-;  (global-set-key (kbd "C-@") 'Control-X-prefix))
-;
 (global-unset-key (kbd "C-@"))
 (global-set-key (kbd "C-@") 'Control-X-prefix)
 
