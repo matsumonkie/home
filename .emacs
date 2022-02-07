@@ -142,12 +142,14 @@
       (kill-whole-line)
     (kill-line)))
 
-(defun my-copy-line ()
-  "Copy current line in the kill ring"
+(defun my-clipboard-kill-ring-save ()
+  "Copy current line in the kill ring or region"
   (interactive)
-  (kill-ring-save (line-beginning-position)
-		  (line-beginning-position 2))
-  (message "Line copied"))
+  (if (use-region-p)
+      (clipboard-kill-ring-save (region-beginning) (region-end))
+    (kill-ring-save (line-beginning-position)
+		    (line-beginning-position 2))
+    (message "Line copied")))
 
 (defun scroll-up-lot ()
   (interactive)
@@ -454,7 +456,7 @@ Unlike `comment-dwim', this always comments whole lines."
 ;; COPY / CUT / PASTE ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-set-key (kbd "C-SPC c") 'clipboard-kill-ring-save)
+(global-set-key (kbd "C-SPC c") 'my-clipboard-kill-ring-save)
 (global-set-key (kbd "C-SPC d") 'kill-region)
 (global-set-key (kbd "C-v") 	'yank)
 (global-set-key (kbd "M-v") 	'yank-pop)
