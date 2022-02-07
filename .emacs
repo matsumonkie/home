@@ -245,11 +245,6 @@ Unlike `comment-dwim', this always comments whole lines."
       (move-region-down start end n)
     (move-line-down n)))
 
-(defun my-horizontal-recenter ()
-  "make the cursor horizontally centered in the window"
-  (interactive)
-  (move-to-column  (/ (- (line-end-position) (line-beginning-position)) 2)))
-
 (defun my-c-equal-align ()
   "align region with the symbol '='"
   (interactive)
@@ -493,9 +488,6 @@ Unlike `comment-dwim', this always comments whole lines."
 ;;;;;;;;;
 
 
-(keyboard-translate ?\C-y ?\C-é)
-(global-set-key (kbd "C-y") 'my-copy-line)
-
 (global-set-key (kbd "C-SPC i") 'indent-region)
 
 (global-set-key (kbd "C-SPC C-c")  'my-comment-line)
@@ -538,11 +530,6 @@ Unlike `comment-dwim', this always comments whole lines."
 (global-set-key (kbd "M-f") 'isearch-backward)
 (define-key isearch-mode-map "\C-f" 'isearch-repeat-forward)
 (define-key isearch-mode-map "\M-f" 'isearch-repeat-backward)
-
-;;;;;;;;;;;;;;
-;; RECENTER ;;
-;;;;;;;;;;;;;;
-(global-set-key (kbd "C-S-l") 'my-horizontal-recenter)
 
 ;; ne detruit pas le serveur si le fichier dans lequel on se trouve est un client
 (global-set-key (kbd "C-SPC q") 'intelligent-close)
