@@ -237,74 +237,6 @@
     ;;close a child frame
     (delete-frame (selected-frame))))
 
-(defun my-jump-bracket ()
-  "Will bounce between matching parens just like % in vi"
-  (interactive)
-  (let ((prev-char (char-to-string (preceding-char)))
-        (next-char (char-to-string (following-char))))
-    (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-	  ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-	  (t (error "%s" "Not on a paren, brace, or bracket")))))
-
-(defun my-align-vars(beg end)
-  "Aligns c/c++ variable declaration names on the same column, with beginning and end taken from selected region."
-  (interactive "r")
-  (save-excursion
-    (let (bol eol expr-end
-	      (max-col 0) col
-	      poslist curpos)
-      (goto-char end)
-      (if (not (bolp))
-          (setq end (line-end-position)))
-      (goto-char beg)
-      (while (and (> end (point)) (not (eobp)))
-        (setq bol (line-beginning-position))
-        (setq eol (line-end-position))
-        (beginning-of-line)
-        (setq expr-end (point))
-        (if (search-forward-regexp "^[^/][^/]\\([a-zA-Z][a-zA-Z]*\\)[ \t]+[^;]" eol t)
-            (let ()
-              (setq expr-end (match-end 1))
-              (while (search-forward-regexp "\\([a-zA-Z][a-zA-Z]*\\)[ \t]+[^;]" eol t)
-                (setq expr-end (match-end 1)))
-              (goto-char expr-end)
-              (setq col (current-column))
-              (if (search-forward-regexp (concat "\\(\\*\\|&[ \t]*\\)?"
-                                                 "\\([a-zA-Z\\_][a-zA-Z0-9\\_]*\\)\\([\[][0-9]+[\]]\\)?"
-                                                 "\\([ \t]*,[ \t]*\\([a-zA-Z\\_][a-zA-Z0-9\\_]*\\)\\([\[][0-9]+[\]]\\)?\\)*"
-                                                 "[ \t]*;$") eol t)
-                  (let ((name-col-end 0))
-                    (if (eq (match-beginning 2) (match-beginning 0))
-                        (setq name-col-end 1))
-                    (setq poslist (cons (list expr-end col (match-beginning 0) name-col-end) poslist))
-                    (if (> col max-col)
-                        (setq max-col col))
-                    (beginning-of-next-line))
-                (beginning-of-next-line)))
-          (beginning-of-next-line)))
-      (setq curpos poslist)
-      (while curpos
-        (let* ((pos (car curpos))
-               (col (car (cdr pos)))
-               (col-end (car (cdr (cdr pos))))
-               (col-end-name (car (cdr (cdr (cdr pos)))))
-               (abs-pos (car pos)))
-          (goto-char abs-pos)
-          (delete-region abs-pos col-end)
-          (insert (make-string (+ (+ (- max-col col) 1) col-end-name) 32)))
-        (setq curpos (cdr curpos))))))
-
-(defun my-align-all-vars()
-  "Aligns c/c++ variable declaration names on the same column in this buffer."
-  (interactive)
-  (save-excursion
-    (let (beg end)
-      (beginning-of-buffer)
-      (setq beg (point))
-      (end-of-buffer)
-      (setq end (point))
-      (my-align-vars beg end))))
-
 (defun beginning-of-next-line()
   "Moves cursor to the beginning of the next line, or nowhere if at end of the buffer"
   (interactive)
@@ -317,21 +249,6 @@
   (interactive)
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil))
-
-(defun insert-brackets () "insert brackets and go between them" (interactive)
-       (insert "[]")
-       (backward-char 1))
-
-(defun insert-parentheses ()
-  "insert parentheses and go between them"
-  (interactive)
-  (insert "()")
-  (backward-char 1))
-
-(defun my-indent-line()
-  "indent current-line"
-  (interactive)
-  (indent-according-to-mode))
 
 (defun my-indent-buffer ()
   "Indent the current buffer"
@@ -800,24 +717,18 @@
 (define-key yas-minor-mode-map (kbd "M-q") #'yas-expand)
 ;; to show available snippets in current mode: M-x yas-describe-tables
 
-;; ** Ido
-
-;; auto completion a la Sublime when searching for files
-
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
 
 ;; ** Flx-ido
 
+;; auto completion a la Sublime when searching for files
+
 (install-package 'flx-ido)
 (require 'flx-ido)
+(setq ido-enable-flex-matching t
+      ido-use-faces nil) ; disable color
 (ido-mode 1)
 (ido-everywhere 1)
 (flx-ido-mode 1)
-(setq ido-enable-flex-matching t)
-;; disable ido faces to see flx highlights.
-(setq ido-use-faces nil)
 
 ;; ** Projectile
 
@@ -834,7 +745,7 @@
 
 (install-package 'ace-jump-mode)
 (require 'ace-jump-mode)
-(setq ace-jump-mode-case-fold nil)
+(setq ace-jump-mode-case-fold nil) ;; don't ignore case
 (global-set-key (kbd "C-j") 'ace-jump-mode)
 (global-set-key (kbd "M-j") 'ace-jump-char-mode)
 
@@ -845,7 +756,6 @@
 (install-package 'expand-region)
 ;;(global-set-key (kbd "M-o") 'er/expand-region)
 ;;(global-set-key (kbd "M-O") 'er/contract-region)
-
 
 
 ;; ** Multiple cursor
@@ -991,9 +901,9 @@
 
 ;; ** Perspective
 
-;(install-package 'perspective)
-;(require 'perspective)
-;(persp-mode)
+;;(install-package 'perspective)
+;;(require 'perspective)
+;;(persp-mode)
 
 ;; ** Centaur tabs
 
@@ -1090,7 +1000,7 @@
 (define-key lsp-command-map (kbd "r") 'lsp-find-references)
 (define-key lsp-command-map (kbd "d") 'lsp-find-definition)
 
-;(setq lsp-keymap-prefix (kbd "C-c C-l"))
+;;(setq lsp-keymap-prefix (kbd "C-c C-l"))
 
 ;;; Shortcuts
 
@@ -1204,7 +1114,7 @@
  '(centaur-tabs-selected-modified ((t (:background "sky blue" :foreground "black"))))
  '(centaur-tabs-unselected ((t (:background "#f0f0f0" :foreground "black"))))
  '(centaur-tabs-unselected-modified ((t (:background "#f0f0f0" :foreground "black")))))
- '(centaur-tabs-default ((t (:background "#f0f0f0"))))
+'(centaur-tabs-default ((t (:background "#f0f0f0"))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
