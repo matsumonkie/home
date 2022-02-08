@@ -715,6 +715,12 @@ Unlike `comment-dwim', this always comments whole lines."
 (install-package 'dash)
 (require 'dash)
 
+;; ** diff-hl
+
+(install-package 'diff-hl)
+(global-diff-hl-mode)
+(unless (window-system) (diff-hl-margin-mode))
+
 ;; ** bm - bookmark
 
 (install-package 'bm)
