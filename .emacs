@@ -721,6 +721,9 @@ Unlike `comment-dwim', this always comments whole lines."
 (global-diff-hl-mode)
 (unless (window-system) (diff-hl-margin-mode))
 
+(add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
+(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
 ;; ** bm - bookmark
 
 (install-package 'bm)
