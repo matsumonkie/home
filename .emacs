@@ -624,8 +624,9 @@ Unlike `comment-dwim', this always comments whole lines."
     (setq auto-hscroll-mode 1)
     (setq automatic-hscrolling t)))
 
-;; No visual alert
-(setq visible-bell 'nil)
+;; No visual nor audible alert
+(setq visible-bell 'nil
+      ring-bell-function 'ignore)
 
 ;; Save cursor position and load it automatically when opening file
 (setq save-place-file (concat user-emacs-directory "saveplace"))
@@ -727,12 +728,12 @@ Unlike `comment-dwim', this always comments whole lines."
 ;; ** bm - bookmark
 
 (install-package 'bm)
-(require 'bm)
 
 (global-set-key (kbd "M-m") 'bm-toggle)
 (global-set-key (kbd "M-N") 'bm-next)
 (global-set-key (kbd "M-T") 'bm-previous)
 (setq bm-highlight-style 'bm-highlight-only-line) ;;default, the last one in the pic
+(setq bm-marker 'bm-marker-right)
 
 ;; ** yasnippet
 
@@ -1125,7 +1126,6 @@ Unlike `comment-dwim', this always comments whole lines."
 ;; * Themes
 
 (install-package 'doom-themes)
-
 (load-theme 'doom-one-light t)
 
 ;; * Custom
