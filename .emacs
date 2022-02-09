@@ -1017,9 +1017,6 @@ Unlike `comment-dwim', this always comments whole lines."
 (add-hook 'elm-mode-hook #'lsp)
 (add-hook 'haskell-literate-mode-hook #'lsp)
 
-(require 'lsp-haskell)
-
-
 (setq lsp-enable-file-watchers nil) ; not sure why we would need this but enabling this on big project slows down everything considerably
 
 (setq lsp-keymap-prefix "C-b")
@@ -1027,6 +1024,11 @@ Unlike `comment-dwim', this always comments whole lines."
 (define-key lsp-command-map (kbd "e") 'lsp-execute-code-action)
 (define-key lsp-command-map (kbd "r") 'lsp-find-references)
 (define-key lsp-command-map (kbd "d") 'lsp-find-definition)
+
+(setq lsp-ui-sideline-show-code-actions t ;; show code actions in sideline
+      lsp-ui-doc-show-with-cursor t ;; move the cursor over a symbol to show the doc
+      )
+
 
 ;;(setq lsp-keymap-prefix (kbd "C-c C-l"))
 
