@@ -730,8 +730,8 @@ Unlike `comment-dwim', this always comments whole lines."
 (install-package 'bm)
 
 (global-set-key (kbd "M-m") 'bm-toggle)
-(global-set-key (kbd "M-N") 'bm-next)
-(global-set-key (kbd "M-T") 'bm-previous)
+;; (global-set-key (kbd "M-N") 'bm-next)
+;; (global-set-key (kbd "M-T") 'bm-previous)
 (setq bm-highlight-style 'bm-highlight-only-line) ;;default, the last one in the pic
 (setq bm-marker 'bm-marker-right)
 
@@ -932,6 +932,13 @@ Unlike `comment-dwim', this always comments whole lines."
 ;;(install-package 'perspective)
 ;;(require 'perspective)
 ;;(persp-mode)
+
+;; ** tab-bar
+
+(tab-bar-mode)
+
+(global-set-key (kbd "M-T") 'tab-previous)
+(global-set-key (kbd "M-N") 'tab-next)
 
 ;; ** Centaur tabs
 
@@ -1142,7 +1149,11 @@ Unlike `comment-dwim', this always comments whole lines."
  '(centaur-tabs-selected ((t (:background "sky blue" :foreground "black"))))
  '(centaur-tabs-selected-modified ((t (:background "sky blue" :foreground "black"))))
  '(centaur-tabs-unselected ((t (:background "#f0f0f0" :foreground "black"))))
- '(centaur-tabs-unselected-modified ((t (:background "#f0f0f0" :foreground "black")))))
+ '(centaur-tabs-unselected-modified ((t (:background "#f0f0f0" :foreground "black"))))
+ '(tab-bar ((t (:background "#f0f0f0" :foreground "black" :box nil))))
+ '(tab-bar-tab ((t (:background "sky blue" :foreground "black" :box nil))))
+ '(tab-bar-tab-group-current ((t (:inherit tab-bar-tab :weight bold))))
+ '(tab-line-tab-current ((t (:background "sky blue" :foreground "black")))))
 '(centaur-tabs-default ((t (:background "#f0f0f0"))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1153,4 +1164,8 @@ Unlike `comment-dwim', this always comments whole lines."
  '(lsp-enable-file-watchers nil)
  '(package-selected-packages
    '(perspective yasnippet-snippets yasnippet rip-grep git-link use-package lsp-ui doom-themes centaur-tabs lsp-haskell lsp-mode haskell-mode nix-mode helm-ag csv-mode elm-mode markdown-mode magit multiple-cursors expand-region ace-jump-mode projectile flx-ido tabbar dash))
+ '(tab-bar-close-button-show nil)
+ '(tab-bar-close-tab-select 'left)
+ '(tab-bar-new-button-show nil)
+ '(tab-bar-new-tab-to 'rightmost)
  '(warning-suppress-types '((comp))))
