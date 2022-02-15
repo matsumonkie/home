@@ -730,8 +730,8 @@ Unlike `comment-dwim', this always comments whole lines."
 (install-package 'bm)
 
 (global-set-key (kbd "M-m") 'bm-toggle)
-;; (global-set-key (kbd "M-N") 'bm-next)
-;; (global-set-key (kbd "M-T") 'bm-previous)
+(global-set-key (kbd "M-s") 'bm-next)
+(global-set-key (kbd "M-r") 'bm-previous)
 (setq bm-highlight-style 'bm-highlight-only-line) ;;default, the last one in the pic
 (setq bm-marker 'bm-marker-right)
 
