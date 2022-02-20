@@ -28,6 +28,11 @@
 
 (message "\n -- setting alias --\n")
 
+;; ** tab-bar
+
+(defalias 'nt 'tab-bar-new-tab)
+(defalias 'ct 'tab-bar-close-tab)
+
 ;; ** Centaur
 
 (defalias 'mtl 'centaur-tabs-move-current-tab-to-left)
